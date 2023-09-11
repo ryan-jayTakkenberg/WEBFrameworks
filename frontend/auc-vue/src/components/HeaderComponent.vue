@@ -9,7 +9,7 @@
         <p class="subtitle">Offered to you by Hva.nl </p>
       </div>
       <div class="right-image">
-        <img src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="header-image">
+        <img url="google.com" src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="header-image">
       </div>
     </div>
   </header>
@@ -19,8 +19,9 @@
 .header {
   padding: 10px;
   border-bottom: 1px solid black;
-  background-color: pink;
-
+  background-image: url("@/assets/download.jpg");
+  background-size: contain; /* Hier wordt 'contain' gebruikt om de afbeelding te passen zonder delen af te snijden */
+  background-position: center; /* Hiermee wordt de achtergrondafbeelding in het midden van de header geplaatst */
 }
 
 .header-content {
@@ -69,6 +70,8 @@ padding: 5px;
   text-align: right; /* Right-align subtitle text */
   padding-right: 15px;
 }
+
+
 
 
 </style>
