@@ -5,7 +5,7 @@
         <img src="@/assets/tijd.jpg" alt="Tijd afbeelding" class="header-image">
       </div>
       <div class="text-content">
-        <h1>Header werkt!</h1>
+        <h1>The Auctioneer</h1>
         <p class="subtitle">Offered to you by Hva.nl </p>
       </div>
       <div class="right-image">
@@ -36,7 +36,9 @@ h1 {
   padding-bottom: 20px;
 }
 .header-image{
-  height: 125px;
+
+  max-width: 100%;
+  height: auto;
 
 
 }
@@ -45,6 +47,7 @@ h1 {
   display: flex;
   align-items: center;
 padding: 5px;
+
 
 
 }
