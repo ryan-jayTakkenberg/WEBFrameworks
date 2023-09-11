@@ -74,5 +74,10 @@ padding: 5px;
 
 </style>
 
-<script setup>
+<script>
+export default {
+  name: 'HeaderComponent',
+}
+
+
 </script>
