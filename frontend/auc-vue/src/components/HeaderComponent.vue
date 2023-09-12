@@ -19,7 +19,7 @@
 .header {
   padding: 10px;
   border-bottom: 1px solid black;
-  background-color: #b6780e;
+  background-color: pink;
  }
 
 .header-content {
