@@ -1,9 +1,6 @@
 <script>
 export default {
   name: 'WelcomeComponent',
-  props: {
-    msg: String
-  }
 }
 
 </script>
@@ -16,16 +13,16 @@ export default {
         <h2>The categories</h2>
 
         <ul>
-          <li>
+          <li class="links">
             <a href="google.com">link text</a>
           </li>
-          <li>
+          <li class="links">
             <a href="google.com">link text</a>
           </li>
-          <li>
+          <li class="links">
             <a href="google.com">link text</a>
           </li>
-          <li>
+          <li class="links">
             <a href="google.com">link text</a>
           </li>
         </ul>
@@ -35,10 +32,18 @@ export default {
     <div class="column-middle">
       <h1>Auctions that expire today:</h1>
 
-      <img src="@/assets/veilinghamer.jpg"  class="main-image">
-      <img src="@/assets/veilinghamer.jpg"  class="main-image">
-      <img src="@/assets/veilinghamer.jpg"  class="main-image">
-      <img src="@/assets/veilinghamer.jpg"  class="main-image">
+      <a href="https://google.com" >
+        <img  src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="main-image">
+      </a>
+      <a href="https://google.com" >
+        <img  src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="main-image">
+      </a>
+      <a href="https://google.com" >
+        <img  src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="main-image">
+      </a>
+      <a href="https://google.com" >
+        <img  src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="main-image">
+      </a>
 
 
 
@@ -76,8 +81,7 @@ export default {
   /* Je kunt hier eventueel wat padding of marge toevoegen om de kolommen te scheiden */
 }
 
-a {
-  display: block; /* Verander flex-direction naar block om de links onder elkaar te plaatsen */
+.links {
   margin-bottom: 10px;
 }
 

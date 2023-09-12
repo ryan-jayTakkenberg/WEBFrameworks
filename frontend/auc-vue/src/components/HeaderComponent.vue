@@ -9,7 +9,7 @@
         <p class="subtitle">Offered to you by Hva.nl </p>
       </div>
       <div class="right-image">
-        <img src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="header-image">
+        <img  src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="header-image">
       </div>
     </div>
   </header>
@@ -19,9 +19,8 @@
 .header {
   padding: 10px;
   border-bottom: 1px solid black;
-  background-color: pink;
-
-}
+  background-color: #b6780e;
+ }
 
 .header-content {
 
@@ -71,7 +70,14 @@ padding: 5px;
 }
 
 
+
+
 </style>
 
-<script setup>
+<script>
+export default {
+  name: 'HeaderComponent',
+}
+
+
 </script>
