@@ -1,11 +1,13 @@
 <script setup>
-import Welcome from "@/components/Welcome.vue";
+import WelcomeComponent from "@/components/WelcomeComponent.vue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
+import NavBarComponent from "@/components/NavBarComponent";
 </script>
 
 <template>
   <HeaderComponent/>
-  <Welcome/>
+  <NavBarComponent/>
+  <WelcomeComponent/>
 </template>
 
 <style scoped>

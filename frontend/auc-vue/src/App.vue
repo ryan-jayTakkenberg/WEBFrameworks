@@ -5,13 +5,15 @@
 
 <script>
 import HeaderComponent  from './components/HeaderComponent.vue'
-import Welcome  from './components/Welcome.vue'
+import WelcomeComponent  from './components/WelcomeComponent.vue'
+import NavBarComponent from "@/components/NavBarComponent";
 
 export default {
   name: 'App',
   components: {
     HeaderComponent,
-    Welcome
+    NavBarComponent,
+    WelcomeComponent
   }
 }
 </script>
