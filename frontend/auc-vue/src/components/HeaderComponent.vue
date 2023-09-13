@@ -9,7 +9,8 @@
         <div class="HeaderSplit">
           <div class="row">
             <div class="col" id = "col-left">
-              <p class="date">Date</p>
+              <p  class="date"> <strong>today is </strong></p>
+              <p class="date"> <strong> {{todayDate}} </strong></p>
             </div>
             <div class="col">
               <p class="subtitle">Offered to you by Hva.nl</p>
@@ -22,6 +23,7 @@
       </div>
     </div>
   </header>
+
 </template>
 
 <style scoped>
@@ -108,9 +110,24 @@ padding: 5px;
 </style>
 
 <script>
+
 export default {
   name: 'HeaderComponent',
-}
+  data() {
+    return {
+      localDate: new Date(),
+    }
+  },
+  computed: {
+    todayDate() {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      return this.localDate.toLocaleDateString('en-US', options);
+
+
+    }
+  },
+};
+
 
 
 </script>
