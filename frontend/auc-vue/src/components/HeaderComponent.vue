@@ -6,7 +6,16 @@
       </div>
       <div class="text-content">
         <h1>The Auctioneer</h1>
-        <p class="subtitle">Offered to you by Hva.nl </p>
+        <div class="HeaderSplit">
+          <div class="row">
+            <div class="col">
+              <p>Date</p>
+            </div>
+            <div class="col">
+              <p class="subtitle">Offered to you by Hva.nl</p>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="right-image">
         <img  src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="header-image">
@@ -16,11 +25,36 @@
 </template>
 
 <style scoped>
+/* Style voor de "row" */
+.HeaderSplit .row {
+  display: flex;
+  align-items: center;
+}
+.row{
+
+  border: 3px solid white ;
+}
+
+.col{
+  border-right: 3px solid white ;
+}
+
+/* Style voor de "col" binnen de "row" */
+.HeaderSplit .col {
+ flex: 1;
+}
+
+/* Optioneel: Voeg ruimte tussen de "col" elementen toe */
+.HeaderSplit .col + .col {
+  margin-left: 20px; /* Voeg de gewenste ruimte tussen de kolommen toe */
+}
+
 .header {
-  padding: 10px;
+
   border-bottom: 1px solid black;
   background-color: pink;
  }
+
 
 .header-content {
 
@@ -68,8 +102,6 @@ padding: 5px;
   text-align: right; /* Right-align subtitle text */
   padding-right: 15px;
 }
-
-
 
 
 </style>
