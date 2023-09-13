@@ -75,10 +75,22 @@ export default {
 
 .column-left,
 .column-right {
-  width: 200px;
   height: auto;
-  margin: 20px;
+  padding: 5px;
   /* Je kunt hier eventueel wat padding of marge toevoegen om de kolommen te scheiden */
+}
+
+.column-right{
+  width: 400px;
+  margin-left: 20px;
+  background-color: #bbb4b4;
+}
+
+.column-left{
+  width: 200px;
+  margin-right: 20px;
+  background-color: #bbb4b4;
+
 }
 
 .links {
