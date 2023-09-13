@@ -31,7 +31,6 @@ export default {
 .navbar {
   overflow: hidden;
   background-color: pink;
-  font-family: Arial;
   margin-top: 5px;
 }
 
