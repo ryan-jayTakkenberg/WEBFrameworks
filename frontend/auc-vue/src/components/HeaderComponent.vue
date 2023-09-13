@@ -8,8 +8,8 @@
         <h1>The Auctioneer</h1>
         <div class="HeaderSplit">
           <div class="row">
-            <div class="col">
-              <p>Date</p>
+            <div class="col" id = "col-left">
+              <p class="date">Date</p>
             </div>
             <div class="col">
               <p class="subtitle">Offered to you by Hva.nl</p>
@@ -30,13 +30,12 @@
   display: flex;
   align-items: center;
 }
-.row{
 
-  border: 3px solid white ;
-}
 
-.col{
-  border-right: 3px solid white ;
+
+.row {
+padding-bottom: 0;
+
 }
 
 /* Style voor de "col" binnen de "row" */
@@ -80,9 +79,6 @@ h1 {
   display: flex;
   align-items: center;
 padding: 5px;
-
-
-
 }
 .right-image{
   border-left: 3px solid white;
@@ -102,6 +98,11 @@ padding: 5px;
   text-align: right; /* Right-align subtitle text */
   padding-right: 15px;
 }
+.date{
+  text-align: left;
+  padding-left: 15px;
+}
+
 
 
 </style>
