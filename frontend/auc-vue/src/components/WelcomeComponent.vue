@@ -77,6 +77,7 @@ export default {
 .column-right {
   height: auto;
   padding: 5px;
+  margin-top: 5px;
   /* Je kunt hier eventueel wat padding of marge toevoegen om de kolommen te scheiden */
 }
 

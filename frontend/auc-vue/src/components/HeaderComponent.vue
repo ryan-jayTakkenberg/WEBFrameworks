@@ -33,8 +33,6 @@
   align-items: center;
 }
 
-
-
 .row {
 padding-bottom: 0;
 
@@ -51,8 +49,6 @@ padding-bottom: 0;
 }
 
 .header {
-
-  border-bottom: 1px solid black;
   background-color: pink;
  }
 
