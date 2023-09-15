@@ -32,7 +32,9 @@ export class Offer {
         const statusValues = Object.values(Offer.Status);
         const status = statusValues[Math.floor(Math.random() * statusValues.length)];
         const description = "dummyDescription";
-        const valueHighestBid = status === Offer.Status.NEW ? 0 : Math.floor(Math.random() * 1000);
+
+        const valueBid = Math.floor(Math.random() * 1000);
+        const valueHighestBid = status === Offer.Status.NEW ? null : `\u20AC ${valueBid}`;
 
         // formatting the date according to given example
         const date = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000 + Math.random() * (30 * 24 * 60 * 60 * 1000));
@@ -42,7 +44,7 @@ export class Offer {
         const year = date.getFullYear();
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0')
-        
+
         const sellDate = `${day}, ${dayOfMonth} ${month} ${year}, ${hours}:${minutes}`;
 
         return new Offer(id, title, status, description, sellDate, valueHighestBid);

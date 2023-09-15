@@ -8,7 +8,7 @@
         <th>Title</th>
         <th>Selling Date</th>
         <th>Status</th>
-        <th>Value Hihgest Bid</th>
+        <th>Value Highest Bid</th>
       </tr>
       </thead>
       <tbody>
@@ -17,12 +17,12 @@
         <td>{{offer.title}}</td>
         <td>{{offer.sellDate}}</td>
         <td>{{offer.status}}</td>
-        <td v-if="offer.status !== 'NEW'">{{offer.valueHighestBid}}</td>
-        <td v-else></td>
+        <td>{{offer.valueHighestBid}}</td>
       </tr>
       </tbody>
     </table>
   </div>
+  <button @click="onNewOffer()">New Offer</button>
 </template>
 
 <script>
@@ -31,20 +31,25 @@ import {Offer} from "@/models/offers";
 export default {
   data(){
     return {
+      offerId: 3000,
       offers: []
     };
   },
   created() {
-    let offerId = 30000;
     let amountOfOffers = 8;
 
     for (let i = 0; i < amountOfOffers; i++){
-      const newOffer = Offer.createSampleOffer(offerId);
+      const newOffer = Offer.createSampleOffer(this.offerId);
       this.offers.push(newOffer);
-      offerId = offerId + Math.floor(Math.random() * 3 + 1);
+      this.offerId += Math.floor(Math.random() * 3 + 1);
     }
   },
   methods: {
+    onNewOffer(){
+      const newOffer = Offer.createSampleOffer(this.offerId);
+      this.offers.push(newOffer);
+      this.offerId += Math.floor(Math.random() * 3 + 1);
+    }
   }
 }
 </script>
@@ -70,5 +75,20 @@ tr:nth-child(even){
 
 th{
   background-color: pink;
+}
+
+button{
+  margin: 10px;
+  height: 35px;
+  width: 150px;
+  background-color: pink;
+  position: relative;
+  float: right;
+  border: none;
+}
+
+button:hover{
+  background-color: sandybrown;
+  cursor: pointer;
 }
 </style>
