@@ -30,7 +30,7 @@ export default {
     </div>
 
     <div class="column-middle">
-      <h1>Auctions that expire today:</h1>
+      <h1 class="h1-column-middle">Auctions that expire today:</h1>
 
       <a href="https://google.com" >
         <img  src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="main-image">
@@ -67,7 +67,18 @@ export default {
   flex-direction: row;
 }
 
+.h1-column-middle{
+  text-align: center;
+}
 
+input{
+  text-align: center;
+  margin: 0px 15px 0px 15px;
+  border-radius: 5px;
+  border-color: white;
+  height: 20px;
+  width: 150px;
+}
 
 .column-middle {
   flex: 1; /* Dit zorgt ervoor dat de middelste kolom meeschaalt met het venster */
@@ -84,13 +95,13 @@ export default {
 .column-right{
   width: 400px;
   margin-left: 20px;
-  background-color: #bbb4b4;
+  background-color: pink;
 }
 
 .column-left{
   width: 200px;
   margin-right: 20px;
-  background-color: #bbb4b4;
+  background-color: pink;
 
 }
 
@@ -100,8 +111,9 @@ export default {
 
 
 .main-image {
-  flex: 1;
-  width: 300px;
+  max-width: 100%;
+  height: auto;
   margin: 10px;
+  flex-grow: 1;
 }
 </style>
