@@ -28,11 +28,11 @@ export class Offer {
 
     static createSampleOffer(pId = 0) {
         const id = pId;
-        const title = "Sample Offer";
+        const title = "dummyOffer";
         const statusValues = Object.values(Offer.Status);
         const status = statusValues[Math.floor(Math.random() * statusValues.length)];
-        const description = "Sample Description";
-        const sellDate = new Date(Date.now() + Math.random() * (30 * 24 * 60 * 60 * 1000));
+        const description = "dummyDescription";
+        const sellDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000 + Math.random() * (30 * 24 * 60 * 60 * 1000));
         const valueHighestBid = status === Offer.Status.NEW ? 0 : Math.floor(Math.random() * 1000);
 
         return new Offer(id, title, status, description, sellDate, valueHighestBid);
