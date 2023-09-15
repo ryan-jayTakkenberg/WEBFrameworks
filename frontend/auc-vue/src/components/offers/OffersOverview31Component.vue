@@ -85,6 +85,7 @@ button{
   position: relative;
   float: right;
   border: none;
+  font-size: 16px;
 }
 
 button:hover{
