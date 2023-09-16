@@ -26,43 +26,47 @@
       </tr>
       </tbody>
     </table>
-    <div v-if="selectedOffer">
-      <h2>Selected Offer</h2>
-      <p>ID: {{ selectedOffer.id }}</p>
-      <p>Title: {{ selectedOffer.title }}</p>
-    </div>
+
+    <OffersDetail32 :selectedOffer="selectedOffer"></OffersDetail32>
   </div>
 </template>
 
 <script>
+
+ import OffersDetail32 from "@/components/offers/OffersDetail32.vue";
+
+
 export default {
+  components:{
+    OffersDetail32,
+  },
   data() {
     return {
       offers: [
         { id: 1, title: "Offer 1" },
         { id: 2, title: "Offer 2" },
         { id: 3, title: "Offer 3" },
-        // Add more offers here
+        // dummy offers
       ],
       selectedOffer: null,
-      nextOfferId: 3, // Used to generate unique IDs for new offers
+      nextOfferId: 3, // maakt nieuwe id's aan
     };
   },
-  methods: {
+  methods: {// dit is vooor de select - deslect
     toggleSelection(offer) {
       if (this.selectedOffer === offer) {
-        this.selectedOffer = null; // Deselect if already selected
+        this.selectedOffer = null;
       } else {
         this.selectedOffer = offer;
       }
     },
     addNewOffer() {
       const newOffer = {
-        id: this.nextOfferId++,
+        id: this.nextOfferId += 1, // als ik ++ deedt ging de id niet omhoog
         title: `Offer ${this.nextOfferId}`,
-      };
+      }; // en deze maakt een nieuwe offer aan
       this.offers.push(newOffer);
-      this.selectedOffer = newOffer; // Automatically select the new offer
+      this.selectedOffer = newOffer; // autmomatisch selecteren nieuwe offer
     },
   },
 };
