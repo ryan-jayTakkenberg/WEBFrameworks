@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <div>
-      <h2>Offer Details</h2>
-    </div>
+  <div >
     <div v-if="!selectedOffer">
       <h2>Select one offer from above</h2>
     </div>
@@ -42,6 +39,7 @@ export default {
 
 
 <style scoped>
+
 h2 {
   text-align: center;
 }

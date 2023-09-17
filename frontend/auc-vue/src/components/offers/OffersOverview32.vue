@@ -1,33 +1,41 @@
-<template>
-  <div>
-    <h1>Offers List</h1>
-    <button @click="addNewOffer">New Offer</button>
-    <table>
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr
-          v-for="offer in offers"
-          :key="offer.id"
-          :class="{ selected: offer === selectedOffer }"
-      >
-        <td>{{ offer.id }}</td>
-        <td>{{ offer.title }}</td>
-        <td>
-          <button @click="toggleSelection(offer)">
-            {{ offer === selectedOffer ? 'Deselect' : 'Select' }}
-          </button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
 
-    <OffersDetail32 :selectedOffer="selectedOffer"></OffersDetail32>
+
+<template>
+  <div class="Detail">
+    <div class="left-content">
+      <h1>Offers List</h1>
+      <button @click="addNewOffer">New Offer</button>
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+            v-for="offer in offers"
+            :key="offer.id"
+            :class="{ selected: offer === selectedOffer }"
+        >
+          <td>{{ offer.id }}</td>
+          <td>{{ offer.title }}</td>
+          <td>
+            <button @click="toggleSelection(offer)">
+              {{ offer === selectedOffer ? 'Deselect' : 'Select' }}
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="right-content">
+      <div>
+        <h2>Offer Details</h2>
+        <OffersDetail32 :selectedOffer="selectedOffer"></OffersDetail32>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -74,6 +82,22 @@ export default {
 
 
 <style scoped>
+
+.Detail {
+  display: flex;
+  justify-content: space-between; /* Plaats de twee inhoudselementen aan de uiteinden */
+  gap: 20px; /* Voeg wat ruimte toe tussen de twee inhoudselementen */
+}
+h2{
+  margin-bottom: 88px;
+}
+.left-content {
+  flex: 1;
+}
+
+.right-content {
+  flex: 1; /* Maak beide inhoudselementen even breed */
+}
 h2{
   text-align: center;
 }
