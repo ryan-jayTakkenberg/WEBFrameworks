@@ -1,17 +1,36 @@
 <template>
   <div >
     <div v-if="!selectedOffer">
-      <h2>Select one offer from above</h2>
+      <h2>Select one offer from the left</h2>
     </div>
     <div v-if="selectedOffer">
       <table>
         <tbody>
         <tr>
-          <th colspan="2">ID: {{ selectedOffer.id }}</th>
+          <th colspan="2">Offer details (id={{ selectedOffer.id }})</th>
         </tr>
         <tr>
           <th>Title:</th>
           <td>{{ selectedOffer.title }}</td>
+        </tr>
+        <tr>
+          <th>Description:</th>
+          <td>{{selectedOffer.description}}</td>
+        </tr>
+        <tr>
+          <th>Status:</th>
+          <td>{{selectedOffer.status}}</td>
+        </tr>
+        <tr>
+          <th>Sell date:</th>
+          <td><input type="date" class="inputfieldDate"><br>{{selectedOffer.sellDate}}</td>
+        </tr>
+        <tr>
+          <th>Highest Bid:</th>
+          <!-- eslint-disable vue/no-mutating-props -->
+          <td><input type="text" class="inputfieldText" v-model="selectedOffer.valueHighestBid"></td>
+
+
         </tr>
         </tbody>
       </table>
@@ -39,6 +58,10 @@ export default {
 
 
 <style scoped>
+.inputfieldDate{
+  width: 97.5%;
+  margin: 10px 10px 10px 0;
+}
 
 h2 {
   text-align: center;
