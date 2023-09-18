@@ -35,8 +35,6 @@
           <th>Highest Bid:</th>
           <!-- eslint-disable vue/no-mutating-props -->
           <td><input type="text" class="inputfieldBid" v-model="selectedOffer.valueHighestBid"></td>
-
-
         </tr>
         </tbody>
       </table>

@@ -17,13 +17,13 @@
           </tr>
           </tbody>
         </table>
+        <button @click="addNewOffer">New Offer</button>
       </div>
       <div class="right-content">
         <OffersDetail32 :selectedOffer="selectedOffer" @delete-offer="handleDeleteOffer"></OffersDetail32>
       </div>
     </div>
   </div>
-  <button @click="addNewOffer">New Offer</button>
 </template>
 
 <script>
