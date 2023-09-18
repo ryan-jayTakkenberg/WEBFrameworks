@@ -1,66 +1,56 @@
-
-
 <template>
   <div class="Detail">
+    <div class="titleHeader">
+      <h2>Overview of all offered articles</h2>
+    </div>
+    <div class="content">
     <div class="left-content">
-      <h1>Offers List</h1>
-      <button @click="addNewOffer">New Offer</button>
       <table>
         <thead>
         <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Action</th>
+          <th>Offer Title with ID</th>
         </tr>
         </thead>
         <tbody>
-        <tr
-            v-for="offer in offers"
-            :key="offer.id"
-            :class="{ selected: offer === selectedOffer }"
-        >
-          <td>{{ offer.id }}</td>
-          <td>{{ offer.title }}</td>
-          <td>
-            <button @click="toggleSelection(offer)">
-              {{ offer === selectedOffer ? 'Deselect' : 'Select' }}
-            </button>
-          </td>
+        <tr v-for="offer in offers" :key="offer.id" :class="{ selected: offer === selectedOffer }">
+          <td @click="toggleSelection(offer)" class="overviewTableContent">{{ offer.title }} - {{ offer.id }}</td>
         </tr>
         </tbody>
       </table>
     </div>
     <div class="right-content">
-      <div>
-        <h2>Offer Details</h2>
         <OffersDetail32 :selectedOffer="selectedOffer"></OffersDetail32>
-      </div>
+    </div>
     </div>
   </div>
+  <button @click="addNewOffer">New Offer</button>
 </template>
 
 <script>
-
- import OffersDetail32 from "@/components/offers/OffersDetail32.vue";
-
+import OffersDetail32 from "@/components/offers/OffersDetail32.vue";
+import {Offer} from "@/models/offers";
 
 export default {
-  components:{
+  components: {
     OffersDetail32,
   },
   data() {
     return {
-      offers: [
-        { id: 1, title: "Offer 1" },
-        { id: 2, title: "Offer 2" },
-        { id: 3, title: "Offer 3" },
-        // dummy offers
-      ],
+      offers: [],
+      offerId: 3000,
       selectedOffer: null,
-      nextOfferId: 3, // maakt nieuwe id's aan
     };
+  }, created() {
+    let amountOfOffers = 6;
+
+    for (let i = 0; i < amountOfOffers; i++) {
+      const newOffer = Offer.createSampleOffer(this.offerId);
+      this.offers.push(newOffer);
+      this.offerId += Math.floor(Math.random() * 3 + 1);
+    }
   },
-  methods: {// dit is vooor de select - deslect
+  methods: {
+    // dit is vooor de select - deslect
     toggleSelection(offer) {
       if (this.selectedOffer === offer) {
         this.selectedOffer = null;
@@ -69,70 +59,76 @@ export default {
       }
     },
     addNewOffer() {
-      const newOffer = {
-        id: this.nextOfferId += 1, // als ik ++ deedt ging de id niet omhoog
-        title: `Offer ${this.nextOfferId}`,
-      }; // en deze maakt een nieuwe offer aan
+      const newOffer = Offer.createSampleOffer(this.offerId);
       this.offers.push(newOffer);
+      this.offerId += Math.floor(Math.random() * 3 + 1);
       this.selectedOffer = newOffer; // autmomatisch selecteren nieuwe offer
     },
   },
 };
 </script>
 
-
 <style scoped>
+.overviewTableContent:hover{
+  cursor: pointer;
+  background-color: pink;
+}
 
 .Detail {
   display: flex;
-  justify-content: space-between; /* Plaats de twee inhoudselementen aan de uiteinden */
-  gap: 20px; /* Voeg wat ruimte toe tussen de twee inhoudselementen */
+  flex-direction: column;
 }
-h2{
-  margin-bottom: 88px;
+
+.content{
+  display: flex;
+  flex-direction: row;
 }
+
 .left-content {
-  flex: 1;
+  width: 25%;
+  margin-right: 5px;
 }
 
 .right-content {
-  flex: 1; /* Maak beide inhoudselementen even breed */
-}
-h2{
-  text-align: center;
+  width: 75%;
+  margin-left: 5px;
 }
 
-table{
+table {
   border-collapse: collapse;
   width: 100%;
 }
 
-th, td{
+th, td {
   border: 1px solid black;
   padding: 5px;
 }
 
-tr:nth-child(even){
+tr:nth-child(even) {
   background-color: #e8e8e8;
 }
 
-th{
+th {
   background-color: pink;
 }
 
-button{
+button {
   margin: 10px;
   height: 35px;
   width: 150px;
   background-color: pink;
   position: relative;
-  float: right;
+  float: left;
   border: none;
   font-size: 16px;
 }
 
-button:hover{
+button:hover {
   background-color: sandybrown;
   cursor: pointer;
+}
+
+tr.selected {
+  background-color: pink;
 }
 </style>

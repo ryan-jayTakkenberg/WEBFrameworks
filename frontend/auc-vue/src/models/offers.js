@@ -28,7 +28,7 @@ export class Offer {
 
     static createSampleOffer(pId = 0) {
         const id = pId;
-        const title = "dummyOffer";
+        const title = "A great article offer";
         const statusValues = Object.values(Offer.Status);
         const status = statusValues[Math.floor(Math.random() * statusValues.length)];
         const description = "dummyDescription";
