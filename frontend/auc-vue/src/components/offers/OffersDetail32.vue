@@ -15,7 +15,7 @@
         </tr>
         <tr>
           <th>Description:</th>
-          <td>{{selectedOffer.description}}</td>
+          <td><input type="text"></td>
         </tr>
         <tr>
           <th>Status:</th>
@@ -23,7 +23,8 @@
         </tr>
         <tr>
           <th>Sell date:</th>
-          <td><input type="date" class="inputfieldDate"><br>{{selectedOffer.sellDate}}</td>
+<!--          eslint-disable vue/no-mutating-props-->
+          <td><input type="date" class="inputfieldDate" v-model="selectedOffer.sellDate"><br>{{selectedOffer.sellDate}}</td>
         </tr>
         <tr>
           <th>Highest Bid:</th>
