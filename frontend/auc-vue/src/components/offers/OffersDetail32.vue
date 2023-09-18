@@ -40,6 +40,8 @@
         </tr>
         </tbody>
       </table>
+      <button @click="deleteDetails">Delete</button>
+
     </div>
   </div>
 </template>
@@ -58,6 +60,11 @@ export default {
       // Emit an event to notify the parent component of the selection change
       this.$emit('toggle-selection', offer);
     },
+    deleteDetails(){
+      this.$emit('delete-offer', this.selectedOffer);
+
+
+    }
   },
 };
 </script>

@@ -4,23 +4,23 @@
       <h2>Overview of all offered articles</h2>
     </div>
     <div class="content">
-    <div class="left-content">
-      <table>
-        <thead>
-        <tr>
-          <th>Offer Title with ID</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="offer in offers" :key="offer.id" :class="{ selected: offer === selectedOffer }">
-          <td @click="toggleSelection(offer)" class="overviewTableContent">{{ offer.title }} - {{ offer.id }}</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="right-content">
-        <OffersDetail32 :selectedOffer="selectedOffer"></OffersDetail32>
-    </div>
+      <div class="left-content">
+        <table>
+          <thead>
+          <tr>
+            <th>Offer Title with ID</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="offer in offers" :key="offer.id" :class="{ selected: offer === selectedOffer }">
+            <td @click="toggleSelection(offer)" class="overviewTableContent">{{ offer.title }} - {{ offer.id }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="right-content">
+        <OffersDetail32 :selectedOffer="selectedOffer" @delete-offer="handleDeleteOffer"></OffersDetail32>
+      </div>
     </div>
   </div>
   <button @click="addNewOffer">New Offer</button>
@@ -64,7 +64,16 @@ export default {
       this.offerId += Math.floor(Math.random() * 3 + 1);
       this.selectedOffer = newOffer; // autmomatisch selecteren nieuwe offer
     },
-  },
+      handleDeleteOffer(offerToDelete) {
+        // Remove the offer from the list
+        this.offers = this.offers.filter((offer) => offer.id !== offerToDelete.id);
+
+        // Unselect the deleted offer
+        if (this.selectedOffer && this.selectedOffer.id === offerToDelete.id) {
+          this.selectedOffer = null;
+        }
+      },
+    },
 };
 </script>
 
