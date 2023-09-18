@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div v-if="!selectedOffer">
       <h2>Select an offer from the left</h2>
     </div>
@@ -11,7 +11,7 @@
         </tr>
         <tr>
           <th>Title:</th>
-          <!--          eslint-disable vue/no-mutating-props-->
+          <!-- eslint-disable vue/no-mutating-props-->
           <td><input type="text" class="inputfieldText" v-model="selectedOffer.title"></td>
         </tr>
         <tr>
@@ -22,14 +22,16 @@
           <th>Status:</th>
           <td>
             <select class="selectOptions">
-              <option> {{selectedOffer.status}}</option>
+              <option> {{ selectedOffer.status }}</option>
             </select>
           </td>
         </tr>
         <tr>
           <th>Sell date:</th>
           <!-- eslint-disable vue/no-mutating-props-->
-          <td><input type="date" class="inputfieldDate" v-model="selectedOffer.sellDate"><br>{{selectedOffer.sellDate}}</td>
+          <td><input type="datetime-local" class="inputfieldDate"
+                     v-model="sellDateUpdater"><br>{{ selectedOffer.sellDate }}
+          </td>
         </tr>
         <tr>
           <th>Highest Bid:</th>
@@ -44,10 +46,6 @@
   </div>
 </template>
 
-
-
-
-
 <script>
 export default {
   props: {
@@ -58,23 +56,53 @@ export default {
       // Emit an event to notify the parent component of the selection change
       this.$emit('toggle-selection', offer);
     },
-    deleteDetails(){
+    deleteDetails() {
       this.$emit('delete-offer', this.selectedOffer);
     }
   },
+  computed: {
+    sellDateUpdater: {
+      get() {
+        if (this.selectedOffer && this.selectedOffer.sellDate) {
+          const dateObject = new Date(this.selectedOffer.sellDate);
+          const year = dateObject.getFullYear();
+          const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+          const day = dateObject.getDate().toString().padStart(2, "0");
+          const hours = dateObject.getHours().toString().padStart(2, "0");
+          const minutes = dateObject.getMinutes().toString().padStart(2, "0");
+
+          return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+        return '';
+      },
+      set(localDateTime) {
+        const date = new Date(localDateTime);
+        const year = date.getFullYear();
+        const dayOfMonth = date.toLocaleString('en-US', { weekday: 'short'});
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const day = date.getDate().toString().padStart(2, "0");
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+        const formattedDate = `${dayOfMonth}, ${year}-${month}-${day} ${hours}:${minutes}`;
+
+        this.$emit('update-sell-date', formattedDate);
+      }
+    }
+  }
+
 };
 </script>
 
 <style scoped>
-.inputfieldText{
+.inputfieldText {
   width: 97.5%;
 }
 
-.selectOptions{
+.selectOptions {
   width: 40%;
 }
 
-.inputfieldDate{
+.inputfieldDate {
   width: 97.5%;
   margin: 0 0 10px 0;
 }

@@ -20,7 +20,11 @@
         <button @click="addNewOffer">New Offer</button>
       </div>
       <div class="right-content">
-        <OffersDetail32 :selectedOffer="selectedOffer" @delete-offer="handleDeleteOffer"></OffersDetail32>
+        <OffersDetail32
+            :selectedOffer="selectedOffer"
+            @delete-offer="handleDeleteOffer"
+            @update-sell-date="handleUpdateSellDate">
+        </OffersDetail32>
       </div>
     </div>
   </div>
@@ -71,9 +75,14 @@ export default {
       // Unselect the deleted offer
       if (this.selectedOffer && this.selectedOffer.id === offerToDelete.id) {
         this.selectedOffer = null;
-        }
-      },
+      }
     },
+    handleUpdateSellDate(isoString) {
+      if (this.selectedOffer) {
+        this.selectedOffer.sellDate = isoString;
+      }
+    }
+  }
 };
 </script>
 
