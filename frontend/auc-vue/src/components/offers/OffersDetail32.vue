@@ -11,25 +11,30 @@
         </tr>
         <tr>
           <th>Title:</th>
-          <td>{{ selectedOffer.title }}</td>
+          <!--          eslint-disable vue/no-mutating-props-->
+          <td><input type="text" class="inputfieldText" v-model="selectedOffer.title"></td>
         </tr>
         <tr>
           <th>Description:</th>
-          <td><input type="text"></td>
+          <td><input type="text" class="inputfieldText"></td>
         </tr>
         <tr>
           <th>Status:</th>
-          <td>{{selectedOffer.status}}</td>
+          <td>
+            <select class="selectOptions">
+              <option> {{selectedOffer.status}}</option>
+            </select>
+          </td>
         </tr>
         <tr>
           <th>Sell date:</th>
-<!--          eslint-disable vue/no-mutating-props-->
+          <!-- eslint-disable vue/no-mutating-props-->
           <td><input type="date" class="inputfieldDate" v-model="selectedOffer.sellDate"><br>{{selectedOffer.sellDate}}</td>
         </tr>
         <tr>
           <th>Highest Bid:</th>
           <!-- eslint-disable vue/no-mutating-props -->
-          <td><input type="text" class="inputfieldText" v-model="selectedOffer.valueHighestBid"></td>
+          <td><input type="text" class="inputfieldBid" v-model="selectedOffer.valueHighestBid"></td>
 
 
         </tr>
@@ -59,9 +64,17 @@ export default {
 
 
 <style scoped>
+.inputfieldText{
+  width: 97.5%;
+}
+
+.selectOptions{
+  width: 40%;
+}
+
 .inputfieldDate{
   width: 97.5%;
-  margin: 10px 10px 10px 0;
+  margin: 0 0 10px 0;
 }
 
 h2 {
