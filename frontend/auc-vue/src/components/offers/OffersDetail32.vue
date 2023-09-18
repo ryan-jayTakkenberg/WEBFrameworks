@@ -1,7 +1,7 @@
 <template>
   <div >
     <div v-if="!selectedOffer">
-      <h2>Select one offer from the left</h2>
+      <h2>Select an offer from the left</h2>
     </div>
     <div v-if="selectedOffer">
       <table>
@@ -60,13 +60,10 @@ export default {
     },
     deleteDetails(){
       this.$emit('delete-offer', this.selectedOffer);
-
-
     }
   },
 };
 </script>
-
 
 <style scoped>
 .inputfieldText{
@@ -102,9 +99,6 @@ tr:nth-child(even) {
 
 th {
   background-color: pink;
-}
-.full-width {
-  width: 100%;
 }
 
 button {

@@ -64,13 +64,13 @@ export default {
       this.offerId += Math.floor(Math.random() * 3 + 1);
       this.selectedOffer = newOffer; // autmomatisch selecteren nieuwe offer
     },
-      handleDeleteOffer(offerToDelete) {
-        // Remove the offer from the list
-        this.offers = this.offers.filter((offer) => offer.id !== offerToDelete.id);
+    handleDeleteOffer(offerToDelete) {
+      // Remove the offer from the list
+      this.offers = this.offers.filter((offer) => offer.id !== offerToDelete.id);
 
-        // Unselect the deleted offer
-        if (this.selectedOffer && this.selectedOffer.id === offerToDelete.id) {
-          this.selectedOffer = null;
+      // Unselect the deleted offer
+      if (this.selectedOffer && this.selectedOffer.id === offerToDelete.id) {
+        this.selectedOffer = null;
         }
       },
     },
