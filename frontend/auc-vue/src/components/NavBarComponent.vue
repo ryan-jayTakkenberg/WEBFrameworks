@@ -13,7 +13,7 @@
     </div>
     <router-link to="/myaccount">My Account</router-link>
     <div class="nav-right">
-      <router-link to="/signup">Sign Up</router-link>
+      <router-link to="/sign-up">Sign Up</router-link>
       <router-link to="/login">Log In</router-link>
     </div>
   </div>
