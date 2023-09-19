@@ -1,6 +1,7 @@
 <script>
 export default {
   name: 'WelcomeComponent',
+
 }
 
 </script>

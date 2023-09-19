@@ -1,7 +1,7 @@
 <template>
-  <HeaderComponent/>
-  <NavBarComponent/>
-  <router-view></router-view>
+    <HeaderComponent/>
+    <NavBarComponent/>
+    <router-view></router-view>
 </template>
 
 <script>
@@ -10,7 +10,7 @@ import NavBarComponent from "@/components/NavBarComponent.vue";
 
 
 export default {
-  name: 'App',
+  name: 'AppComponent33',
   components: {
     HeaderComponent,
     NavBarComponent,

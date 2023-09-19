@@ -1,20 +1,20 @@
 <template>
   <div class="navbar">
-    <a href="#">Home</a>
-    <a href="#m">My Offers</a>
+    <router-link to="/" >Home</router-link>
+    <router-link to="/offers" >My Offers</router-link>
     <div class="dropdown">
       <button class="dropbtn">My Bids
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <a href="#">Active</a>
-        <a href="#">History</a>
+        <router-link to="/offeractive">Active</router-link>
+        <router-link to="/offerhistory">History</router-link>
       </div>
     </div>
-    <a href="#myaccount">My Account</a>
+    <router-link to="/myaccount">My Account</router-link>
     <div class="nav-right">
-      <a href="#SignUp">Sign Up</a>
-      <a href="#LogIn">Log In</a>
+      <router-link to="/signup">Sign Up</router-link>
+      <router-link to="/login">Log In</router-link>
     </div>
   </div>
 </template>
@@ -24,6 +24,7 @@ export default {
   name: "NavBarComponent"
 }
 </script>
+
 
 <style scoped>
 
