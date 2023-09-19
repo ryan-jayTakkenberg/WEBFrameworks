@@ -21,8 +21,8 @@
         <tr>
           <th>Status:</th>
           <td>
-            <select class="selectOptions">
-              <option> {{ selectedOffer.status }}</option>
+            <select class="selectOptions" v-model="selectedOffer.status">
+              <option v-for="status in offerStatusArray" :key="status" :value="status">{{status}}</option>
             </select>
           </td>
         </tr>
@@ -47,9 +47,16 @@
 </template>
 
 <script>
+import {Offer} from "@/models/offers";
+
 export default {
   props: {
     selectedOffer: Object,
+  },
+  data() {
+    return{
+      offerStatusArray: Object.values(Offer.Status)
+    }
   },
   methods: {
     toggleSelection(offer) {
