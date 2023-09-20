@@ -1,7 +1,16 @@
 <template>
   <div class="navbar">
     <router-link to="/" active-class="highlight">Home</router-link>
-    <router-link to="/offers" active-class="highlight">My Offers</router-link>
+    <div class="dropdown">
+      <button class="dropbtn" >Offers
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <router-link to="/offers" active-class="highlight">All Offers overview</router-link>
+        <router-link to="/offersDetail" active-class="highlight">Offers details(comp)</router-link>
+        <router-link to="/offersEdit" active-class="highlight">Offers edit(router)</router-link>
+      </div>
+    </div>
     <div class="dropdown">
       <button class="dropbtn" >My Bids
         <i class="fa fa-caret-down"></i>

@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return{
-      offerStatusArray: Object.values(Offer.Status)
+      offerStatusArray: Object.values(Offer.Status),
     }
   },
   methods: {
@@ -65,7 +65,13 @@ export default {
     },
     deleteDetails() {
       this.$emit('delete-offer', this.selectedOffer);
-    }
+    },
+    // onSelect(offer){
+    //   if (offer != null && offer !== this.selectedOffer){
+    //     this.$router.push(this.$route.matched[0].path + "/" + offer.id)
+    // } else if(){
+    //   }
+    // }
   },
   computed: {
     sellDateUpdater: {
