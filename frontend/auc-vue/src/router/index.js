@@ -20,7 +20,8 @@ const routes = [
     children: [
         {
             path: ":id",
-            component: OffersDetail32
+            component: OffersDetail32,
+            name: 'offerDetail',
         }
     ]},
     { path: "/offersDetail", component: offersOverview32}

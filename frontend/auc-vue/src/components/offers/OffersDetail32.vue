@@ -7,7 +7,7 @@
       <table>
         <tbody>
         <tr>
-          <th colspan="2">Offer details (id={{ selectedOffer.id }})</th>
+          <th  colspan="2">Offer details (id={{ selectedOffer.id }})</th>
         </tr>
         <tr>
           <th>Title:</th>
@@ -54,10 +54,11 @@ export default {
     selectedOffer: Object,
   },
   data() {
-    return{
+    return {
       offerStatusArray: Object.values(Offer.Status),
     }
   },
+
   methods: {
     toggleSelection(offer) {
       // Emit an event to notify the parent component of the selection change
@@ -66,12 +67,7 @@ export default {
     deleteDetails() {
       this.$emit('delete-offer', this.selectedOffer);
     },
-    // onSelect(offer){
-    //   if (offer != null && offer !== this.selectedOffer){
-    //     this.$router.push(this.$route.matched[0].path + "/" + offer.id)
-    // } else if(){
-    //   }
-    // }
+
   },
   computed: {
     sellDateUpdater: {

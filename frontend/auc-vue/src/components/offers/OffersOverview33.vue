@@ -13,7 +13,8 @@
           </thead>
           <tbody>
           <tr v-for="offer in offers" :key="offer.id" :class="{ selected: offer === selectedOffer }">
-            <td @click="toggleSelection(offer)" class="overviewTableContent">{{ offer.title }} - {{ offer.id }}</td>
+            <td  @click="toggleAndSelect(offer)"  class="overviewTableContent">
+              {{ offer.title }} - {{ offer.id }}</td>
           </tr>
           </tbody>
         </table>
@@ -27,6 +28,7 @@
         </OffersDetail32>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -54,7 +56,11 @@ export default {
     }
   },
   methods: {
-    // dit is vooor de select - deslect
+    toggleAndSelect(offer) {
+      this.toggleSelection(offer);
+      this.onSelect(offer);
+    },
+    // dit is voor de select - deslect
     toggleSelection(offer) {
       if (this.selectedOffer === offer) {
         this.selectedOffer = null;
@@ -81,8 +87,31 @@ export default {
       if (this.selectedOffer) {
         this.selectedOffer.sellDate = isoString;
       }
-    }
-  }
+    },onSelect(offer) {
+      console.log(offer);
+      if (offer !== this.selectedOffer && offer != null) {
+        console.log("eerste"
+        )
+        // If another offer is selected, update 'selectedOffer' and navigate to the corresponding route
+        this.$router.push(this.$route.matched[0].path + "/" + offer.id);
+      } else if (this.selectedOffer != null) {
+        console.log("tweede")
+        // Navigate to the parent path to unselect the selectedOffer
+        this.$router.push(this.$route.matched[0].path); // Navigate to the parent path
+      }
+    },findSelectedFromRouteParam(id) {
+      if (!id) return null;
+      return this.offers.find((offer) => offer.id === parseInt(id));
+    },
+  },watch: {
+    '$route'() {
+      const id = this.$route.params.id; // Get the 'id' parameter from the route
+      if (id !== undefined) {
+        // Check if 'id' is defined in the route parameters
+        this.selectedOffer = this.findSelectedFromRouteParam(id);
+      }
+    },
+  },
 };
 </script>
 
