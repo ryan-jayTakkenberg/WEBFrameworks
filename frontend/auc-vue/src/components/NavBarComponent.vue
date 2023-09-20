@@ -1,19 +1,19 @@
 <template>
   <div class="navbar">
-    <router-link to="/" >Home</router-link>
-    <router-link to="/offers" >My Offers</router-link>
+    <router-link to="/" active-class="highlight">Home</router-link>
+    <router-link to="/offers" active-class="highlight">My Offers</router-link>
     <div class="dropdown">
-      <button class="dropbtn">My Bids
+      <button class="dropbtn" >My Bids
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <router-link to="/offeractive">Active</router-link>
-        <router-link to="/offerhistory">History</router-link>
+        <router-link to="/offeractive" active-class="highlight">Active</router-link>
+        <router-link to="/offerhistory" active-class="highlight">History</router-link>
       </div>
     </div>
-    <router-link to="/myaccount">My Account</router-link>
+    <router-link to="/myaccount" active-class="highlight">My Account</router-link>
     <div class="nav-right">
-      <router-link to="/sign-up">Sign Up</router-link>
+      <router-link to="/signup" active-class="highlight">Sign Up</router-link>
       <router-link to="/login">Log In</router-link>
     </div>
   </div>
