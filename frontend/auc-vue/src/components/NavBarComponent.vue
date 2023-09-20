@@ -14,7 +14,7 @@
     <router-link to="/myaccount" active-class="highlight">My Account</router-link>
     <div class="nav-right">
       <router-link to="/signup" active-class="highlight">Sign Up</router-link>
-      <router-link to="/login">Log In</router-link>
+      <router-link to="/login" active-class="highlight">Log In</router-link>
     </div>
   </div>
 </template>
@@ -27,6 +27,9 @@ export default {
 
 
 <style scoped>
+.highlight{
+  background-color: sandybrown;
+}
 
 /* Navbar container */
 .navbar {
