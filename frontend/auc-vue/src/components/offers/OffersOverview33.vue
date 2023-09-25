@@ -21,11 +21,7 @@
         <button @click="addNewOffer">New Offer</button>
       </div>
       <div class="right-content">
-        <OffersDetail32
-            :selectedOffer="selectedOffer"
-            @delete-offer="handleDeleteOffer"
-            @update-sell-date="handleUpdateSellDate">
-        </OffersDetail32>
+        <router-view></router-view>
       </div>
     </div>
 
@@ -33,12 +29,10 @@
 </template>
 
 <script>
-import OffersDetail32 from "@/components/offers/OffersDetail32.vue";
 import {Offer} from "@/models/offers";
 
 export default {
   components: {
-    OffersDetail32,
   },
   data() {
     return {
@@ -90,14 +84,9 @@ export default {
     },onSelect(offer) {
       console.log(offer);
       if (offer !== this.selectedOffer && offer != null) {
-        console.log("eerste"
-        )
-        // If another offer is selected, update 'selectedOffer' and navigate to the corresponding route
         this.$router.push(this.$route.matched[0].path + "/" + offer.id);
       } else if (this.selectedOffer != null) {
-        console.log("tweede")
-        // Navigate to the parent path to unselect the selectedOffer
-        this.$router.push(this.$route.matched[0].path); // Navigate to the parent path
+        this.$router.push(this.$route.path);
       }
     },findSelectedFromRouteParam(id) {
       if (!id) return null;
@@ -105,11 +94,8 @@ export default {
     },
   },watch: {
     '$route'() {
-      const id = this.$route.params.id; // Get the 'id' parameter from the route
-      if (id !== undefined) {
-        // Check if 'id' is defined in the route parameters
-        this.selectedOffer = this.findSelectedFromRouteParam(id);
-      }
+      console.log("watch $route", this.$route)
+      this.selectedOffer = this.findSelectedFromRouteParam(this.$route);
     },
   },
 };

@@ -1,14 +1,14 @@
 <template>
   <div class="navbar">
-    <router-link to="/" active-class="highlight">Home</router-link>
+    <router-link to="/home" active-class="highlight">Home</router-link>
     <div class="dropdown">
       <button class="dropbtn" >Offers
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <router-link to="/offers" active-class="highlight">All Offers overview</router-link>
-        <router-link to="/offersDetail" active-class="highlight">Offers details(comp)</router-link>
-        <router-link to="/offersEdit" active-class="highlight">Offers edit(router)</router-link>
+        <router-link to="/offers/overview31" active-class="highlight">All Offers overview</router-link>
+        <router-link to="/offers/overview32" active-class="highlight">Offers details(comp)</router-link>
+        <router-link to="/offers/overview33" active-class="highlight">Offers edit(router)</router-link>
       </div>
     </div>
     <div class="dropdown">
@@ -16,14 +16,14 @@
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <router-link to="/offeractive" active-class="highlight">Active</router-link>
-        <router-link to="/offerhistory" active-class="highlight">History</router-link>
+        <router-link to="/offer/active" active-class="highlight">Active</router-link>
+        <router-link to="/offer/history" active-class="highlight">History</router-link>
       </div>
     </div>
     <router-link to="/myaccount" active-class="highlight">My Account</router-link>
     <div class="nav-right">
-      <router-link to="/signup" active-class="highlight">Sign Up</router-link>
-      <router-link to="/login" active-class="highlight">Log In</router-link>
+      <router-link to="/sign-up" active-class="highlight">Sign Up</router-link>
+      <router-link to="/sign-in" active-class="highlight">Log In</router-link>
     </div>
   </div>
 </template>

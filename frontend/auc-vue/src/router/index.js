@@ -8,23 +8,23 @@ import offersOverview33 from "@/components/offers/OffersOverview33";
 import OffersDetail32 from "@/components/offers/OffersDetail32";
 
 const routes = [
-    { path: "/", component: WelcomePage },
-    { path: "/offers", component: OffersOverview31Component },
-    { path: "/offeractive", },
-    { path: "/offerhistory", },
+    { path: "/home", component: WelcomePage },
+    { path: "/offers/overview31", component: OffersOverview31Component },
+    { path: "/offers/overview32", component: offersOverview32},
+    { path: "/offers/overview33", component: offersOverview33,
+        children: [
+            {
+                path: ":id",
+                component: OffersDetail32,
+                props: true
+            }
+        ]},
+    { path: "/offer/active", },
+    { path: "/offer/history", },
+    { path: "/sign-in", },
+    { path: "/sign-up", },
     { path: "/myaccount", },
-    { path: "/login", },
-    { path: "/signup", },
-    { path: "/:catchAll(.*)", component: unknownRoute },
-    { path: "/offersEdit", component: offersOverview33,
-    children: [
-        {
-            path: ":id",
-            component: OffersDetail32,
-            name: 'offerDetail',
-        }
-    ]},
-    { path: "/offersDetail", component: offersOverview32}
+    { path: "/:catchAll(.*)", component: unknownRoute }
 ]
 
 export const router = createRouter({
