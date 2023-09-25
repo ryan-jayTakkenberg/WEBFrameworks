@@ -16,7 +16,7 @@
         </tr>
         <tr>
           <th>Description:</th>
-          <td><input type="text" class="inputfieldText"></td>
+          <td><input type="text" class="inputfieldText" v-model="selectedOffer.description"></td>
         </tr>
         <tr>
           <th>Status:</th>
