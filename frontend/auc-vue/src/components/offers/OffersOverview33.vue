@@ -13,7 +13,7 @@
           </thead>
           <tbody>
           <tr v-for="offer in offers" :key="offer.id" :class="{ selected: offer === selectedOffer }">
-            <td  @click="toggleAndSelect(offer)"  class="overviewTableContent">
+            <td  @click="onSelect(offer)"  class="overviewTableContent">
               {{ offer.title }} - {{ offer.id }}</td>
           </tr>
           </tbody>
@@ -21,7 +21,9 @@
         <button @click="addNewOffer">New Offer</button>
       </div>
       <div class="right-content">
-        <router-view></router-view>
+        <router-view
+        :offerList="offers"
+        ></router-view>
       </div>
     </div>
 
@@ -50,16 +52,13 @@ export default {
     }
   },
   methods: {
-    toggleAndSelect(offer) {
-      this.toggleSelection(offer);
-      this.onSelect(offer);
-    },
-    // dit is voor de select - deslect
-    toggleSelection(offer) {
+    onSelect(offer) {
       if (this.selectedOffer === offer) {
         this.selectedOffer = null;
+        this.$router.push(this.$route.matched[0].path);
       } else {
         this.selectedOffer = offer;
+        this.$router.push(this.$route.matched[0].path + "/" + offer.id);
       }
     },
     addNewOffer() {
@@ -81,23 +80,8 @@ export default {
       if (this.selectedOffer) {
         this.selectedOffer.sellDate = isoString;
       }
-    },onSelect(offer) {
-      console.log(offer);
-      if (offer !== this.selectedOffer && offer != null) {
-        this.$router.push(this.$route.matched[0].path + "/" + offer.id);
-      } else if (this.selectedOffer != null) {
-        this.$router.push(this.$route.path);
-      }
-    },findSelectedFromRouteParam(id) {
-      if (!id) return null;
-      return this.offers.find((offer) => offer.id === parseInt(id));
-    },
-  },watch: {
-    '$route'() {
-      console.log("watch $route", this.$route)
-      this.selectedOffer = this.findSelectedFromRouteParam(this.$route);
-    },
-  },
+    }
+  }
 };
 </script>
 

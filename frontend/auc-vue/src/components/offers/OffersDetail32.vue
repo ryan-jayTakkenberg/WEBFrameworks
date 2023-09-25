@@ -3,7 +3,7 @@
     <div v-if="!selectedOffer">
       <h2>Select an offer from the left</h2>
     </div>
-    <div v-if="selectedOffer">
+    <div v-else>
       <table>
         <tbody>
         <tr>
@@ -50,12 +50,12 @@
 import {Offer} from "@/models/offers";
 
 export default {
-  props: {
-    selectedOffer: Object,
-  },
+  props: ['offerList'],
+
   data() {
     return {
       offerStatusArray: Object.values(Offer.Status),
+      selectedOffer: null
     }
   },
 
@@ -68,6 +68,9 @@ export default {
       this.$emit('delete-offer', this.selectedOffer);
     },
 
+  },
+  created(){
+    this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
   },
   computed: {
     sellDateUpdater: {
@@ -96,6 +99,11 @@ export default {
 
         this.$emit('update-sell-date', formattedDate);
       }
+    }
+  },
+  watch: {
+    '$route.params.id'(){
+      this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
     }
   }
 
