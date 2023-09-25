@@ -16,7 +16,6 @@ const routes = [
             {
                 path: ":id",
                 component: OffersDetail32,
-                props: true
             }
         ]},
     { path: "/offer/active", },
