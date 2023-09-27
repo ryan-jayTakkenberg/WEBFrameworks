@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <router-link to="/home" active-class="highlight">Home</router-link>
+    <router-link to="/" active-class="highlight">Home</router-link>
     <div class="dropdown">
       <button class="dropbtn" >Offers
         <i class="fa fa-caret-down"></i>

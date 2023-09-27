@@ -10,7 +10,7 @@ import offersOverview34 from "@/components/offers/OffersOverview34.vue";
 import OffersDetail33 from "@/components/offers/OffersDetail33.vue";
 
 const routes = [
-    { path: "/home", component: WelcomePage },
+    { path: "/", component: WelcomePage },
     { path: "/offers/overview31", component: OffersOverview31Component },
     { path: "/offers/overview32", component: offersOverview32},
     { path: "/offers/overview33", component: offersOverview33,
