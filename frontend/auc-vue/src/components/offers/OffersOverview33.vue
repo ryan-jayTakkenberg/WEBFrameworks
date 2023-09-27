@@ -22,7 +22,10 @@
       </div>
       <div class="right-content">
         <router-view
-        :offerList="offers"
+            :offerList="offers"
+            :selectedOffer="selectedOffer"
+            @delete-offer="handleDeleteOffer"
+            @update-sell-date="handleUpdateSellDate"
         ></router-view>
       </div>
     </div>
@@ -33,9 +36,9 @@
 <script>
 import {Offer} from "@/models/offers";
 
+
 export default {
-  components: {
-  },
+
   data() {
     return {
       offers: [],
@@ -74,7 +77,9 @@ export default {
       // Unselect the deleted offer
       if (this.selectedOffer && this.selectedOffer.id === offerToDelete.id) {
         this.selectedOffer = null;
+        this.$router.push(this.$route.matched[0].path);
       }
+
     },
     handleUpdateSellDate(isoString) {
       if (this.selectedOffer) {
