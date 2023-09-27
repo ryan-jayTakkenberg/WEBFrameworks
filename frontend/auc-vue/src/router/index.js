@@ -7,6 +7,7 @@ import unknownRoute from "@/components/UnknownRoute.vue";
 import offersOverview33 from "@/components/offers/OffersOverview33";
 import OffersDetail32 from "@/components/offers/OffersDetail32";
 import offersOverview34 from "@/components/offers/OffersOverview34.vue";
+import OffersDetail34 from "@/components/offers/OffersDetail34";
 
 const routes = [
     { path: "/", component: WelcomePage },
@@ -22,7 +23,7 @@ const routes = [
         children: [
             {
                 path: ":id",
-                component: OffersDetail32,
+                component: OffersDetail34,
             }
         ]},
     { path: "/offer/active", },
