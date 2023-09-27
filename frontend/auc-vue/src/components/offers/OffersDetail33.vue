@@ -3,11 +3,11 @@
     <div v-if="!selectedOffer">
       <h2>Select an offer from the left</h2>
     </div>
-    <div v-if="selectedOffer">
+    <div v-else>
       <table>
         <tbody>
         <tr>
-          <th colspan="2">Offer details (id={{ selectedOffer.id }})</th>
+          <th  colspan="2">Offer details (id={{ selectedOffer.id }})</th>
         </tr>
         <tr>
           <th>Title:</th>
@@ -16,7 +16,7 @@
         </tr>
         <tr>
           <th>Description:</th>
-          <td><input type="text" class="inputfieldText"></td>
+          <td><input type="text" class="inputfieldText" v-model="selectedOffer.description"></td>
         </tr>
         <tr>
           <th>Status:</th>
@@ -50,14 +50,15 @@
 import {Offer} from "@/models/offers";
 
 export default {
-  props: {
-    selectedOffer: Object,
-  },
+  props: ['offerList'],
+
   data() {
-    return{
-      offerStatusArray: Object.values(Offer.Status)
+    return {
+      offerStatusArray: Object.values(Offer.Status),
+      selectedOffer: null
     }
   },
+
   methods: {
     toggleSelection(offer) {
       // Emit an event to notify the parent component of the selection change
@@ -65,7 +66,11 @@ export default {
     },
     deleteDetails() {
       this.$emit('delete-offer', this.selectedOffer);
-    }
+    },
+
+  },
+  created(){
+    this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
   },
   computed: {
     sellDateUpdater: {
@@ -94,6 +99,11 @@ export default {
 
         this.$emit('update-sell-date', formattedDate);
       }
+    }
+  },
+  watch: {
+    '$route.params.id'(){
+      this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
     }
   }
 
