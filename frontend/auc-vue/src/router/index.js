@@ -5,7 +5,6 @@ import OffersOverview31Component from "@/components/offers/OffersOverview31Compo
 import offersOverview32 from "@/components/offers/OffersOverview32.vue";
 import unknownRoute from "@/components/UnknownRoute.vue";
 import offersOverview33 from "@/components/offers/OffersOverview33";
-import OffersDetail32 from "@/components/offers/OffersDetail32";
 import offersOverview34 from "@/components/offers/OffersOverview34.vue";
 import OffersDetail33 from "@/components/offers/OffersDetail33.vue";
 import OffersDetail34 from "@/components/offers/OffersDetail34";
