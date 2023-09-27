@@ -49,4 +49,11 @@ export class Offer {
 
         return new Offer(id, title, status, description, sellDate, valueHighestBid);
     }
+
+    static copyConstructor(offer){
+        if (offer == null)return null;
+        let copy = Object.assign(new Offer(), offer);
+        copy.sellDate = new Date(offer.sellDate);
+        return copy
+    }
 }

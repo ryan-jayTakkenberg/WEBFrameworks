@@ -9,6 +9,7 @@
         <router-link to="/offers/overview31" active-class="highlight">All Offers overview</router-link>
         <router-link to="/offers/overview32" active-class="highlight">Offers details(comp)</router-link>
         <router-link to="/offers/overview33" active-class="highlight">Offers edit(router)</router-link>
+        <router-link to="/offers/overview34" active-class="highlight">Offers edit(managed)</router-link>
       </div>
     </div>
     <div class="dropdown">

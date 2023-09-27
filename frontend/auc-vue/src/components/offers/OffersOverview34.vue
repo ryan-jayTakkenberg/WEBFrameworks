@@ -13,31 +13,28 @@
           </thead>
           <tbody>
           <tr v-for="offer in offers" :key="offer.id" :class="{ selected: offer === selectedOffer }">
-            <td @click="toggleSelection(offer)" class="overviewTableContent">{{ offer.title }} - {{ offer.id }}</td>
+            <td  @click="onSelect(offer)"  class="overviewTableContent">
+              {{ offer.title }} - {{ offer.id }}</td>
           </tr>
           </tbody>
         </table>
         <button @click="addNewOffer">New Offer</button>
       </div>
       <div class="right-content">
-        <OffersDetail32
+        <router-view
             :offerList="offers"
-            :selectedOffer="selectedOffer"
-            @delete-offer="handleDeleteOffer"
-            @update-sell-date="handleUpdateSellDate">
-        </OffersDetail32>
+        ></router-view>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
-import OffersDetail32 from "@/components/offers/OffersDetail32.vue";
 import {Offer} from "@/models/offers";
 
 export default {
   components: {
-    OffersDetail32,
   },
   data() {
     return {
@@ -55,12 +52,13 @@ export default {
     }
   },
   methods: {
-    // dit is vooor de select - deslect
-    toggleSelection(offer) {
+    onSelect(offer) {
       if (this.selectedOffer === offer) {
         this.selectedOffer = null;
+        this.$router.push(this.$route.matched[0].path);
       } else {
         this.selectedOffer = offer;
+        this.$router.push(this.$route.matched[0].path + "/" + offer.id);
       }
     },
     addNewOffer() {
