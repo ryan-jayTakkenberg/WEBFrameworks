@@ -1,7 +1,7 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
 
 import WelcomePage from "@/components/WelcomeComponent.vue";
-import OffersOverview31Component from "@/components/offers/OffersOverview31Component.vue";
+import OffersOverview31 from "@/components/offers/OffersOverview31.vue";
 import offersOverview32 from "@/components/offers/OffersOverview32.vue";
 import unknownRoute from "@/components/UnknownRoute.vue";
 import offersOverview33 from "@/components/offers/OffersOverview33";
@@ -11,7 +11,7 @@ import OffersDetail34 from "@/components/offers/OffersDetail34";
 
 const routes = [
     { path: "/", component: WelcomePage },
-    { path: "/offers/overview31", component: OffersOverview31Component },
+    { path: "/offers/overview31", component: OffersOverview31},
     { path: "/offers/overview32", component: offersOverview32},
     { path: "/offers/overview33", component: offersOverview33,
         children: [

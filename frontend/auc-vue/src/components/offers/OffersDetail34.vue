@@ -55,22 +55,21 @@ export default {
   data() {
     return {
       offerStatusArray: Object.values(Offer.Status),
-      selectedOffer: null
+      selectedOffer: null,
     }
   },
 
   methods: {
-    toggleSelection(offer) {
-      // Emit an event to notify the parent component of the selection change
-      this.$emit('toggle-selection', offer);
-    },
     deleteDetails() {
       this.$emit('delete-offer', this.selectedOffer);
-    },
 
+
+    }
   },
   created(){
     this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
+
+
   },
   computed: {
     sellDateUpdater: {

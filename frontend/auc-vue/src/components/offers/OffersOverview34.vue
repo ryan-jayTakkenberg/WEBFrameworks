@@ -69,6 +69,7 @@ export default {
       this.offers.push(newOffer);
       this.offerId += Math.floor(Math.random() * 3 + 1);
       this.selectedOffer = newOffer; // autmomatisch selecteren nieuwe offer
+      this.$router.push(this.$route.matched[0].path + "/" + newOffer.id)
     },
     handleDeleteOffer(offerToDelete) {
       // Remove the offer from the list
