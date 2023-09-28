@@ -13,7 +13,7 @@
           </thead>
           <tbody>
           <tr v-for="offer in offers" :key="offer.id" :class="{ selected: offer === selectedOffer }">
-            <td  @click="onSelect(offer)"  class="overviewTableContent">
+            <td  @click="onSelect(offer)" class="overviewTableContent">
               {{ offer.title }} - {{ offer.id }}</td>
           </tr>
           </tbody>

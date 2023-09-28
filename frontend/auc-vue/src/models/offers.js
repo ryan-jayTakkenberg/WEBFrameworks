@@ -17,6 +17,13 @@ export class Offer {
         WITHDRAWN: "WITHDRAWN"
     }
 
+    static DateFormat = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+
     constructor(id, title, status, description, sellDate, valueHighestBid) {
         this.id = id;
         this.title = title;
@@ -38,8 +45,7 @@ export class Offer {
 
         // formatting the date according to given example
         const date = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000 + Math.random() * (30 * 24 * 60 * 60 * 1000));
-        const format = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
-        const sellDate = date.toLocaleDateString("en-US", format);
+        const sellDate = date.toLocaleDateString("en-US", this.DateFormat);
 
         return new Offer(id, title, status, description, sellDate, valueHighestBid);
     }
@@ -47,7 +53,7 @@ export class Offer {
     static copyConstructor(offer){
         if (offer == null) return null;
         let copy = Object.assign(new Offer(), offer);
-        copy.sellDate = new Date(offer.sellDate);
+        copy.sellDate = new Date(offer.sellDate).toLocaleDateString("en-US", Offer.DateFormat);
         return copy;
     }
 }

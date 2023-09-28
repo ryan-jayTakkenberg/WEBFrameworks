@@ -7,22 +7,22 @@
       <table>
         <tbody>
         <tr>
-          <th  colspan="2">Offer details (id={{ selectedOffer.id }})</th>
+          <th  colspan="2">Offer details (id={{ copiedOffer.id }})</th>
         </tr>
         <tr>
           <th>Title:</th>
           <!-- eslint-disable vue/no-mutating-props-->
-          <td><input type="text" class="inputfieldText" v-model="selectedOffer.title"></td>
+          <td><input type="text" class="inputfieldText" v-model="copiedOffer.title"></td>
         </tr>
         <tr>
           <th>Description:</th>
-          <td><input type="text" class="inputfieldText" v-model="selectedOffer.description"></td>
+          <td><input type="text" class="inputfieldText" v-model="copiedOffer.description"></td>
         </tr>
         <tr>
           <th>Status:</th>
           <td>
-            <select class="selectOptions" v-model="selectedOffer.status">
-              <option v-for="status in offerStatusArray" :key="status" :value="status">{{status}}</option>
+            <select class="selectOptions" v-model="copiedOffer.status">
+              <option v-for="status in offerStatusArray" :key="status" :value="status">{{ status }}</option>
             </select>
           </td>
         </tr>
@@ -36,10 +36,14 @@
         <tr>
           <th>Highest Bid:</th>
           <!-- eslint-disable vue/no-mutating-props -->
-          <td><input type="text" class="inputfieldBid" v-model="selectedOffer.valueHighestBid"></td>
+          <td><input type="text" class="inputfieldBid" v-model="copiedOffer.valueHighestBid"></td>
         </tr>
         </tbody>
       </table>
+      <button @click="handleSave">Save</button>
+      <button @click="handleCancel">Cancel</button>
+      <button @click="handleReset">Reset</button>
+      <button @click="handleClear">Clear</button>
       <button @click="deleteDetails">Delete</button>
 
     </div>
@@ -62,36 +66,57 @@ export default {
   methods: {
     deleteDetails() {
       this.$emit('delete-offer', this.selectedOffer);
+    },
+    handleSave(){
+      this.selectedOffer.title = this.copiedOffer.title;
+      this.selectedOffer.description = this.copiedOffer.description;
+      this.selectedOffer.status =  this.copiedOffer.status;
+      // TODO oplossing vinden voor de date
+      // this.selectedOffer.sellDate = this.copiedOffer.sellDate;
+      this.selectedOffer.valueHighestBid = this.copiedOffer.valueHighestBid;
+    },
+    handleCancel(){
+      this.copiedOffer.title = this.selectedOffer.title;
+      this.copiedOffer.description = this.selectedOffer.description;
+      this.copiedOffer.status = this.selectedOffer.status;
+      this.copiedOffer.sellDate = this.selectedOffer.sellDate;
+      this.copiedOffer.valueHighestBid = this.selectedOffer.valueHighestBid;
+      this.$router.push(this.$route.matched[0].path);
+    },
+    handleClear(){
+      this.copiedOffer.title = null;
+      this.copiedOffer.description = null;
+      this.copiedOffer.status = null;
+      this.copiedOffer.sellDate = null;
+      this.copiedOffer.valueHighestBid = null;
+    },
+    handleReset(){
+      this.copiedOffer.title = this.selectedOffer.title;
+      this.copiedOffer.description = this.selectedOffer.description;
+      this.copiedOffer.status = this.selectedOffer.status;
+      this.copiedOffer.sellDate = this.selectedOffer.sellDate;
+      this.copiedOffer.valueHighestBid = this.selectedOffer.valueHighestBid;
     }
   },
   created(){
     this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
     this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
+
   },
   computed: {
     sellDateUpdater: {
       get() {
         if (this.selectedOffer && this.selectedOffer.sellDate) {
           const dateObject = new Date(this.selectedOffer.sellDate);
-          const format = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
-          // const year = dateObject.getFullYear();
-          // const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
-          // const day = dateObject.getDate().toString().padStart(2, "0");
-          // const hours = dateObject.getHours().toString().padStart(2, "0");
-          // const minutes = dateObject.getMinutes().toString().padStart(2, "0");
-          //
-          // return `${year}-${month}-${day} ${hours}:${minutes}`;
-          return dateObject.toLocaleDateString("de-DE", format);
+          return dateObject.toLocaleDateString("de-DE", Offer.DateFormat);
         }
         return '';
       },
       set(localDateTime) {
         const date = new Date(localDateTime);
-        const format = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
-
-        this.$emit('update-sell-date', date.toLocaleDateString("en-US", format));
+        this.$emit('update-sell-date', date.toLocaleDateString("en-US", Offer.DateFormat));
       }
-    }
+    },
   },
   watch: {
     '$route.params.id'(){
@@ -140,9 +165,9 @@ th {
 }
 
 button {
-  margin: 10px;
+  margin: 5px 0 0 5px;
   height: 35px;
-  width: 200px;
+  width: 13%;
   background-color: pink;
   position: relative;
   float: right;
