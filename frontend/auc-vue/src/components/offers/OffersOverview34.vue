@@ -29,7 +29,6 @@
         ></router-view>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -81,9 +80,9 @@ export default {
         this.$router.push(this.$route.matched[0].path);
       }
     },
-    handleUpdateSellDate(isoString) {
+    handleUpdateSellDate(dateString) {
       if (this.selectedOffer) {
-        this.selectedOffer.sellDate = isoString;
+        this.selectedOffer.sellDate = dateString;
       }
     }
   }

@@ -38,22 +38,16 @@ export class Offer {
 
         // formatting the date according to given example
         const date = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000 + Math.random() * (30 * 24 * 60 * 60 * 1000));
-        const day = date.toLocaleString('en-US', { weekday: 'short'});
-        const month = date.toLocaleString('en-US', { month: 'short'});
-        const dayOfMonth = date.getDate();
-        const year = date.getFullYear();
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0')
-
-        const sellDate = `${day}, ${dayOfMonth} ${month} ${year}, ${hours}:${minutes}`;
+        const format = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+        const sellDate = date.toLocaleDateString("en-US", format);
 
         return new Offer(id, title, status, description, sellDate, valueHighestBid);
     }
 
     static copyConstructor(offer){
-        if (offer == null)return null;
+        if (offer == null) return null;
         let copy = Object.assign(new Offer(), offer);
         copy.sellDate = new Date(offer.sellDate);
-        return copy
+        return copy;
     }
 }

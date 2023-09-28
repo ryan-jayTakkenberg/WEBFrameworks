@@ -56,53 +56,47 @@ export default {
     return {
       offerStatusArray: Object.values(Offer.Status),
       selectedOffer: null,
+      copiedOffer: null,
     }
   },
-
   methods: {
     deleteDetails() {
       this.$emit('delete-offer', this.selectedOffer);
-
-
     }
   },
   created(){
-    this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
-
-
+    this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
+    this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
   },
   computed: {
     sellDateUpdater: {
       get() {
         if (this.selectedOffer && this.selectedOffer.sellDate) {
           const dateObject = new Date(this.selectedOffer.sellDate);
-          const year = dateObject.getFullYear();
-          const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
-          const day = dateObject.getDate().toString().padStart(2, "0");
-          const hours = dateObject.getHours().toString().padStart(2, "0");
-          const minutes = dateObject.getMinutes().toString().padStart(2, "0");
-
-          return `${year}-${month}-${day} ${hours}:${minutes}`;
+          const format = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
+          // const year = dateObject.getFullYear();
+          // const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+          // const day = dateObject.getDate().toString().padStart(2, "0");
+          // const hours = dateObject.getHours().toString().padStart(2, "0");
+          // const minutes = dateObject.getMinutes().toString().padStart(2, "0");
+          //
+          // return `${year}-${month}-${day} ${hours}:${minutes}`;
+          return dateObject.toLocaleDateString("de-DE", format);
         }
         return '';
       },
       set(localDateTime) {
         const date = new Date(localDateTime);
-        const year = date.getFullYear();
-        const dayOfMonth = date.toLocaleString('en-US', { weekday: 'short'});
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const day = date.getDate().toString().padStart(2, "0");
-        const hours = date.getHours().toString().padStart(2, "0");
-        const minutes = date.getMinutes().toString().padStart(2, "0");
-        const formattedDate = `${dayOfMonth}, ${year}-${month}-${day} ${hours}:${minutes}`;
+        const format = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
 
-        this.$emit('update-sell-date', formattedDate);
+        this.$emit('update-sell-date', date.toLocaleDateString("en-US", format));
       }
     }
   },
   watch: {
     '$route.params.id'(){
-      this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
+      this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
+      this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
     }
   }
 
