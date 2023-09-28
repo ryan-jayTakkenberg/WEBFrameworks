@@ -68,14 +68,15 @@ export default {
       this.$emit('delete-offer', this.selectedOffer);
     },
     handleSave(){
+      // TODO oplossing vinden voor de date
       this.selectedOffer.title = this.copiedOffer.title;
       this.selectedOffer.description = this.copiedOffer.description;
       this.selectedOffer.status =  this.copiedOffer.status;
-      // TODO oplossing vinden voor de date
       // this.selectedOffer.sellDate = this.copiedOffer.sellDate;
       this.selectedOffer.valueHighestBid = this.copiedOffer.valueHighestBid;
     },
     handleCancel(){
+      // TODO oplossing vinden voor het deselected van de parent na button klik
       this.copiedOffer.title = this.selectedOffer.title;
       this.copiedOffer.description = this.selectedOffer.description;
       this.copiedOffer.status = this.selectedOffer.status;
