@@ -13,8 +13,9 @@
           </thead>
           <tbody>
           <tr v-for="offer in offers" :key="offer.id" :class="{ selected: offer === selectedOffer }">
-            <td  @click="onSelect(offer)" class="overviewTableContent">
-              {{ offer.title }} - {{ offer.id }}</td>
+            <td @click="onSelect(offer)" class="overviewTableContent">
+              {{ offer.title }} - {{ offer.id }}
+            </td>
           </tr>
           </tbody>
         </table>
@@ -26,6 +27,7 @@
             :selectedOffer="selectedOffer"
             @delete-offer="handleDeleteOffer"
             @update-sell-date="handleUpdateSellDate"
+            @Select-parent-class="SelectParentClass"
         ></router-view>
       </div>
     </div>
@@ -36,8 +38,7 @@
 import {Offer} from "@/models/offers";
 
 export default {
-  components: {
-  },
+  components: {},
   data() {
     return {
       offers: [],
@@ -79,6 +80,15 @@ export default {
         this.selectedOffer = null;
         this.$router.push(this.$route.matched[0].path);
       }
+    }, SelectParentClass(offerToCancel) {
+      {
+        if (this.selectedOffer && this.selectedOffer.id === offerToCancel.id) {
+          this.selectedOffer = null;
+          this.$router.push(this.$route.matched[0].path);
+        }
+
+      }
+
     },
     handleUpdateSellDate(dateString) {
       if (this.selectedOffer) {
@@ -90,7 +100,7 @@ export default {
 </script>
 
 <style scoped>
-.overviewTableContent:hover{
+.overviewTableContent:hover {
   cursor: pointer;
   background-color: pink;
 }
@@ -100,7 +110,7 @@ export default {
   flex-direction: column;
 }
 
-.content{
+.content {
   display: flex;
   flex-direction: row;
 }

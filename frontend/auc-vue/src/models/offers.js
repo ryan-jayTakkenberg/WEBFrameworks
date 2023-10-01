@@ -56,4 +56,6 @@ export class Offer {
         copy.sellDate = new Date(offer.sellDate).toLocaleDateString("en-US", Offer.DateFormat);
         return copy;
     }
+
+
 }

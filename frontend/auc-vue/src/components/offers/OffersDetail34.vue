@@ -28,7 +28,7 @@
         </tr>
         <tr>
           <th>Sell date:</th>
-          <!-- eslint-disable vue/no-mutating-props-->
+
           <td><input type="datetime-local" class="inputfieldDate"
                      v-model="sellDateUpdater"><br>{{ selectedOffer.sellDate }}
           </td>
@@ -40,9 +40,9 @@
         </tr>
         </tbody>
       </table>
-      <button @click="handleSave">Save</button>
-      <button @click="handleCancel">Cancel</button>
-      <button @click="handleReset">Reset</button>
+      <button @click="handleSave" :disabled="!hasChanged">Save</button>
+      <button @click="handleCancel" :disabled="hasChanged">Cancel</button>
+      <button @click="handleReset" :disabled="!hasChanged" >Reset</button>
       <button @click="handleClear">Clear</button>
       <button @click="deleteDetails">Delete</button>
 
@@ -69,20 +69,23 @@ export default {
     },
     handleSave(){
       // TODO oplossing vinden voor de date
+
       this.selectedOffer.title = this.copiedOffer.title;
       this.selectedOffer.description = this.copiedOffer.description;
       this.selectedOffer.status =  this.copiedOffer.status;
-      // this.selectedOffer.sellDate = this.copiedOffer.sellDate;
+      this.selectedOffer.sellDate = this.copiedOffer.sellDate;
       this.selectedOffer.valueHighestBid = this.copiedOffer.valueHighestBid;
+
     },
     handleCancel(){
-      // TODO oplossing vinden voor het deselected van de parent na button klik
+
       this.copiedOffer.title = this.selectedOffer.title;
       this.copiedOffer.description = this.selectedOffer.description;
       this.copiedOffer.status = this.selectedOffer.status;
       this.copiedOffer.sellDate = this.selectedOffer.sellDate;
       this.copiedOffer.valueHighestBid = this.selectedOffer.valueHighestBid;
       this.$router.push(this.$route.matched[0].path);
+      this.$emit('Select-parent-class', this.selectedOffer);
     },
     handleClear(){
       this.copiedOffer.title = null;
@@ -116,15 +119,20 @@ export default {
       set(localDateTime) {
         const date = new Date(localDateTime);
         this.$emit('update-sell-date', date.toLocaleDateString("en-US", Offer.DateFormat));
-      }
+      },
+
+    }, hasChanged() {
+      return this.selectedOffer.title !== this.copiedOffer.title || this.selectedOffer.description !== this.copiedOffer.description
+          || this.selectedOffer.status !== this.copiedOffer.status || this.selectedOffer.sellDate !== this.copiedOffer.sellDate || this.selectedOffer.valueHighestBid !== this.copiedOffer.valueHighestBid;
     },
   },
-  watch: {
-    '$route.params.id'(){
-      this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
-      this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
-    }
-  }
+      watch: {
+        '$route.params.id'() {
+          this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
+          this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
+        }
+      }
+
 
 };
 </script>
