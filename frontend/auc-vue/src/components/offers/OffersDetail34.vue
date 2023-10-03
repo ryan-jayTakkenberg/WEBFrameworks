@@ -40,11 +40,6 @@
         </tr>
         </tbody>
       </table>
-<!--      <button @click="handleSave" :disabled="!hasChanged">Save</button>-->
-<!--      <button @click="handleCancel" :disabled="hasChanged">Cancel</button>-->
-<!--      <button @click="handleReset" :disabled="!hasChanged" >Reset</button>-->
-<!--      <button @click="handleClear">Clear</button>-->
-<!--      <button @click="deleteDetails">Delete</button>-->
       <button @click="confirmation('Save')" :disabled="!hasChanged">Save</button>
       <button @click="confirmation('Clear')" :disabled="!hasChanged">Clear</button>
       <button @click="confirmation('Reset')" :disabled="!hasChanged">Reset</button>
@@ -74,49 +69,23 @@ export default {
   data() {
     return {
       offerStatusArray: Object.values(Offer.Status),
-      selectedOffer: null,
+      selectedOffer: { // Your selected offer object
+        title: '',
+        description: '',
+        status: '',
+        sellDate: '',
+        valueHighestBid: '',
+      },
       copiedOffer: null,
       isConfirmationVisible: false,
       confirmAction: String,
+      unsavedChanges: false,
     }
   },
   methods: {
     deleteDetails() {
       this.$emit('delete-offer', this.selectedOffer);
     },    // handleSave() {
-    //   // TODO oplossing vinden voor de date
-    //   this.selectedOffer.title = this.copiedOffer.title;
-    //   this.selectedOffer.description = this.copiedOffer.description;
-    //   this.selectedOffer.status = this.copiedOffer.status;
-    //   this.selectedOffer.sellDate = this.copiedOffer.sellDate;
-    //   this.selectedOffer.valueHighestBid = this.copiedOffer.valueHighestBid;
-    //   this.$router.push(this.$route.matched[0].path);
-    //   this.$emit('Select-parent-class', this.selectedOffer);
-    // },
-    // handleCancel() {
-    //   this.copiedOffer.title = this.selectedOffer.title;
-    //   this.copiedOffer.description = this.selectedOffer.description;
-    //   this.copiedOffer.status = this.selectedOffer.status;
-    //   this.copiedOffer.sellDate = this.selectedOffer.sellDate;
-    //   this.copiedOffer.valueHighestBid = this.selectedOffer.valueHighestBid;
-    //   this.$router.push(this.$route.matched[0].path);
-    //   this.$emit('Select-parent-class', this.selectedOffer);
-    // },
-    // handleClear() {
-    //   this.copiedOffer.title = null;
-    //   this.copiedOffer.description = null;
-    //   this.copiedOffer.status = null;
-    //   this.copiedOffer.sellDate = null;
-    //   this.copiedOffer.valueHighestBid = null;
-    // },
-    // handleReset() {
-    //   this.copiedOffer.title = this.selectedOffer.title;
-    //   this.copiedOffer.description = this.selectedOffer.description;
-    //   this.copiedOffer.status = this.selectedOffer.status;
-    //   this.copiedOffer.sellDate = this.selectedOffer.sellDate;
-    //   this.copiedOffer.valueHighestBid = this.selectedOffer.valueHighestBid;
-    // },
-
     confirmation(action) {
       this.confirmAction = action;
       this.isConfirmationVisible = true;
@@ -149,16 +118,33 @@ export default {
         this.selectedOffer.status = this.copiedOffer.status;
         this.selectedOffer.sellDate = this.copiedOffer.sellDate;
         this.selectedOffer.valueHighestBid = this.copiedOffer.valueHighestBid;
-        this.$router.push(this.$route.matched[0].path);
-        this.$emit('Select-parent-class', this.selectedOffer);
       }else if (this.confirmAction === "Delete"){
         this.$emit('delete-offer', this.selectedOffer);
       }
       this.isConfirmationVisible = false;
+      this.unsavedChanges = false;
     },
-
+    beforeWindowload(event) {
+      // Display a custom confirmation message
+      event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+    },
   },
   computed: {
+
+    isFormFilled() {
+      if (this.selectedOffer) {
+        return (
+            this.selectedOffer.title &&
+            this.selectedOffer.description &&
+            this.selectedOffer.status &&
+            this.selectedOffer.sellDate &&
+            this.selectedOffer.valueHighestBid
+        );
+      } else {
+        return false;
+      }
+    },
+
     sellDateUpdater: {
       get() {
         if (this.selectedOffer && this.selectedOffer.sellDate) {
@@ -173,23 +159,76 @@ export default {
       },
 
     }, hasChanged() {
-      return this.selectedOffer.title !== this.copiedOffer.title
-          || this.selectedOffer.description !== this.copiedOffer.description
-          || this.selectedOffer.status !== this.copiedOffer.status
-          || this.selectedOffer.sellDate !== this.copiedOffer.sellDate
-          || this.selectedOffer.valueHighestBid !== this.copiedOffer.valueHighestBid;
+      if (
+          this.selectedOffer.title !== this.copiedOffer.title ||
+          this.selectedOffer.description !== this.copiedOffer.description ||
+          this.selectedOffer.status !== this.copiedOffer.status ||
+          this.selectedOffer.sellDate !== this.copiedOffer.sellDate ||
+          this.selectedOffer.valueHighestBid !== this.copiedOffer.valueHighestBid
+      ) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.unsavedChanges = true;
+        return true; // There are changes
+      } else {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        return false; // No changes
+      }
     },
   },
       watch: {
         '$route.params.id'() {
           this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
           this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
+          this.unsavedChanges = false;
         }
-      },created(){
+      },
+  created(){
     this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
     this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
+  }, beforeRouteUpdate(to, from, next) {
+    // Check if there are unsaved changes
+    if (this.unsavedChanges) {
+      // Prompt the user for confirmation
+      if (window.confirm('You have unsaved changes. Do you really want to leave?')) {
+        // User confirmed, allow route update if the form is filled
+        if (this.isFormFilled) {
+          this.unsavedChanges = false; // Reset the flag
+          next();
+        } else {
+          // Display an alert and prevent route update
+          alert('Please fill in all form fields before leaving.');
+          next(false);
+        }
+      } else {
+        // User canceled, stay on the current route
+        next(false);
+      }
+    } else {
+      // No unsaved changes, allow route update
+      next();
+    }
   },
 
+  beforeRouteLeave(to, from, next) {
+    if (this.unsavedChanges) {
+      // Prompt the user for confirmation before leaving the route
+      if (window.confirm('Do you really want to leave this page?')) {
+        // User confirmed, allow route leave
+        next();
+      } else {
+        // User canceled, stay on the current route
+        next();
+      }
+    }
+    else {
+        // User canceled, stay on the current route
+        next();
+      }
+  },mounted() {
+    window.addEventListener('beforeunload', this.beforeWindowload);
+  },beforeUnmount() {
+    window.addEventListener('beforeunload', this.beforeWindowload);
+  }
 
 };
 </script>
