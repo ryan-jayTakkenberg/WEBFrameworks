@@ -204,7 +204,8 @@ export default {
         }
       } else {
         // User canceled, stay on the current route
-        next(false);
+        next();
+        this.unsavedChanges = false;
       }
     } else {
       // No unsaved changes, allow route update
