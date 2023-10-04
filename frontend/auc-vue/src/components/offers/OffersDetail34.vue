@@ -41,12 +41,12 @@
         </tbody>
       </table>
       <button @click="confirmation('Save')" :disabled="!hasChanged">Save</button>
-      <button @click="confirmation('Clear')" :disabled="!hasChanged">Clear</button>
+      <button @click="confirmation('Clear')" >Clear</button>
       <button @click="confirmation('Reset')" :disabled="!hasChanged">Reset</button>
-      <button @click="confirmation('Cancel')" :disabled="hasChanged">Cancel</button>
+      <button @click="confirmation('Cancel')" :disabled="!hasChanged">Cancel</button>
       <button @click="confirmation('Delete')">Delete</button>
 
-      <div v-if="isConfirmationVisible" class="confirmation-dialog">
+           <div v-if="isConfirmationVisible" class="confirmation-dialog">
         <div class="confirmation-content">
           <p v-if="this.confirmAction === 'Delete' ">Are you sure you want to delete this action on id {{ this.selectedOffer.id }}</p>
           <p v-else>Are you sure you want to perform this action on id {{ this.selectedOffer.id }}</p>
@@ -89,6 +89,9 @@ export default {
     confirmation(action) {
       this.confirmAction = action;
       this.isConfirmationVisible = true;
+    },
+    cancel(){
+      this.isConfirmationVisible = false;
     },
     confirm() {
 
