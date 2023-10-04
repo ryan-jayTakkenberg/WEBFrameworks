@@ -7,7 +7,7 @@
       <table>
         <tbody>
         <tr>
-          <th  colspan="2">Offer details (id={{ copiedOffer.id }})</th>
+          <th colspan="2">Offer details (id={{ copiedOffer.id }})</th>
         </tr>
         <tr>
           <th>Title:</th>
@@ -30,7 +30,7 @@
           <th>Sell date:</th>
 
           <td><input type="datetime-local" class="inputfieldDate"
-                     v-model="copiedOffer.sellDate"><br>{{ copiedOffer.sellDate }}
+                     v-model="sellDateUpdater"><br>{{ copiedOffer.sellDate }}
           </td>
         </tr>
         <tr>
@@ -41,14 +41,15 @@
         </tbody>
       </table>
       <button @click="confirmation('Save')" :disabled="!hasChanged">Save</button>
-      <button @click="confirmation('Clear')" >Clear</button>
+      <button @click="confirmation('Clear')">Clear</button>
       <button @click="confirmation('Reset')" :disabled="!hasChanged">Reset</button>
       <button @click="confirmation('Cancel')" :disabled="!hasChanged">Cancel</button>
       <button @click="confirmation('Delete')">Delete</button>
 
       <div v-if="isConfirmationVisible" class="confirmation-dialog">
         <div class="confirmation-content">
-          <p v-if="this.confirmAction === 'Delete' ">Are you sure you want to delete this action on id {{ this.selectedOffer.id }}</p>
+          <p v-if="this.confirmAction === 'Delete' ">Are you sure you want to delete this action on id
+            {{ this.selectedOffer.id }}</p>
           <p v-else>Are you sure you want to perform this action on id {{ this.selectedOffer.id }}</p>
           <button @click="confirm">Confirm</button>
           <button @click="cancel">Cancel</button>
@@ -83,18 +84,14 @@ export default {
     }
   },
   methods: {
-    deleteDetails() {
-      this.$emit('delete-offer', this.selectedOffer);
-    },    // handleSave() {
     confirmation(action) {
       this.confirmAction = action;
       this.isConfirmationVisible = true;
     },
-    cancel(){
+    cancel() {
       this.isConfirmationVisible = false;
     },
     confirm() {
-
       if (this.confirmAction === "Clear") {
         this.copiedOffer.title = null;
         this.copiedOffer.description = null;
@@ -115,13 +112,15 @@ export default {
         this.copiedOffer.valueHighestBid = this.selectedOffer.valueHighestBid;
         this.$router.push(this.$route.matched[0].path);
         this.$emit('Select-parent-class', this.selectedOffer);
-      }else if (this.confirmAction === "Save"){
+      } else if (this.confirmAction === "Save") {
         this.selectedOffer.title = this.copiedOffer.title;
         this.selectedOffer.description = this.copiedOffer.description;
         this.selectedOffer.status = this.copiedOffer.status;
         this.selectedOffer.sellDate = this.copiedOffer.sellDate;
         this.selectedOffer.valueHighestBid = this.copiedOffer.valueHighestBid;
-      }else if (this.confirmAction === "Delete"){
+        console.log(this.copiedOffer)
+        console.log(this.selectedOffer)
+      } else if (this.confirmAction === "Delete") {
         this.$emit('delete-offer', this.selectedOffer);
       }
       this.isConfirmationVisible = false;
@@ -133,7 +132,33 @@ export default {
     },
   },
   computed: {
-
+    sellDateUpdater: {
+      get() {
+        if (this.copiedOffer && this.copiedOffer.sellDate) {
+          return this.copiedOffer.sellDate;
+        }
+        return '';
+      },
+      set(localDateTime) {
+        this.$emit('update-sell-date', localDateTime);
+      },
+    },
+    hasChanged() {
+      if (
+          this.selectedOffer.title !== this.copiedOffer.title ||
+          this.selectedOffer.description !== this.copiedOffer.description ||
+          this.selectedOffer.status !== this.copiedOffer.status ||
+          // this.selectedOffer.sellDate !== this.copiedOffer.sellDate ||
+          this.selectedOffer.valueHighestBid !== this.copiedOffer.valueHighestBid
+      ) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.unsavedChanges = true;
+        return true; // There are changes
+      } else {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        return false; // No changes
+      }
+    },
     isFormFilled() {
       if (this.selectedOffer) {
         return (
@@ -147,43 +172,15 @@ export default {
         return false;
       }
     },
-
-    sellDateUpdater: {
-      get() {
-        if (this.copiedOffer && this.copiedOffer.sellDate) {
-          return this.copiedOffer.sellDate; // Return the raw sellDate
-        }
-        return '';
-      },
-      set(localDateTime) {
-        this.$emit('update-sell-date', localDateTime); // Emit the raw sellDate
-      },
-    },
-    hasChanged() {
-      if (
-          this.selectedOffer.title !== this.copiedOffer.title ||
-          this.selectedOffer.description !== this.copiedOffer.description ||
-          this.selectedOffer.status !== this.copiedOffer.status ||
-          this.selectedOffer.sellDate !== this.copiedOffer.sellDate ||
-          this.selectedOffer.valueHighestBid !== this.copiedOffer.valueHighestBid
-      ) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.unsavedChanges = true;
-        return true; // There are changes
-      } else {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        return false; // No changes
-      }
-    },
   },
-      watch: {
-        '$route.params.id'() {
-          this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
-          this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
-          this.unsavedChanges = false;
-        }
-      },
-  created(){
+  watch: {
+    '$route.params.id'() {
+      this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
+      this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
+      this.unsavedChanges = false;
+    }
+  },
+  created() {
     this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
     this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
   }, beforeRouteUpdate(to, from, next) {
@@ -221,14 +218,13 @@ export default {
         // User canceled, stay on the current route
         next();
       }
+    } else {
+      // User canceled, stay on the current route
+      next();
     }
-    else {
-        // User canceled, stay on the current route
-        next();
-      }
-  },mounted() {
+  }, mounted() {
     window.addEventListener('beforeunload', this.beforeWindowload);
-  },beforeUnmount() {
+  }, beforeUnmount() {
     window.addEventListener('beforeunload', this.beforeWindowload);
   }
 
@@ -264,6 +260,7 @@ export default {
   margin-left: 10px;
   width: 20%;
 }
+
 .inputfieldText {
   width: 97.5%;
 }
