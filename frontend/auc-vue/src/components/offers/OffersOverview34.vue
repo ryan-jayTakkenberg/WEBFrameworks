@@ -38,7 +38,6 @@
 import {Offer} from "@/models/offers";
 
 export default {
-  components: {},
   data() {
     return {
       offers: [],
@@ -86,9 +85,7 @@ export default {
           this.selectedOffer = null;
           this.$router.push(this.$route.matched[0].path);
         }
-
       }
-
     },
     handleUpdateSellDate(dateString) {
       if (this.selectedOffer) {

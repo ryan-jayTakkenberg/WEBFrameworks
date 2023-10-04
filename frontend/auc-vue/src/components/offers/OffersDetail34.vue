@@ -30,7 +30,7 @@
           <th>Sell date:</th>
 
           <td><input type="datetime-local" class="inputfieldDate"
-                     v-model="sellDateUpdater"><br>{{ selectedOffer.sellDate }}
+                     v-model="copiedOffer.sellDate"><br>{{ copiedOffer.sellDate }}
           </td>
         </tr>
         <tr>
@@ -46,7 +46,7 @@
       <button @click="confirmation('Cancel')" :disabled="!hasChanged">Cancel</button>
       <button @click="confirmation('Delete')">Delete</button>
 
-           <div v-if="isConfirmationVisible" class="confirmation-dialog">
+      <div v-if="isConfirmationVisible" class="confirmation-dialog">
         <div class="confirmation-content">
           <p v-if="this.confirmAction === 'Delete' ">Are you sure you want to delete this action on id {{ this.selectedOffer.id }}</p>
           <p v-else>Are you sure you want to perform this action on id {{ this.selectedOffer.id }}</p>
@@ -150,18 +150,16 @@ export default {
 
     sellDateUpdater: {
       get() {
-        if (this.selectedOffer && this.selectedOffer.sellDate) {
-          const dateObject = new Date(this.selectedOffer.sellDate);
-          return dateObject.toLocaleDateString("de-DE", Offer.DateFormat);
+        if (this.copiedOffer && this.copiedOffer.sellDate) {
+          return this.copiedOffer.sellDate; // Return the raw sellDate
         }
         return '';
       },
       set(localDateTime) {
-        const date = new Date(localDateTime);
-        this.$emit('update-sell-date', date.toLocaleDateString("en-US", Offer.DateFormat));
+        this.$emit('update-sell-date', localDateTime); // Emit the raw sellDate
       },
-
-    }, hasChanged() {
+    },
+    hasChanged() {
       if (
           this.selectedOffer.title !== this.copiedOffer.title ||
           this.selectedOffer.description !== this.copiedOffer.description ||
@@ -254,7 +252,7 @@ export default {
   background: white;
   padding: 20px;
   border-radius: 5px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .confirmation-content p {
