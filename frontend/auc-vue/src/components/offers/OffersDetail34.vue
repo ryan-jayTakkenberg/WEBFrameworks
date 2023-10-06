@@ -29,8 +29,8 @@
         <tr>
           <th>Sell date:</th>
 
-          <td><input type="datetime-local" class="inputfieldDate"
-                     v-model="sellDateUpdater"><br>{{ copiedOffer.sellDate }}
+          <td><input type="date" class="inputfieldDate"
+                     v-model="offerDate"><br>{{ copiedOffer.sellDate }}
           </td>
         </tr>
         <tr>
@@ -99,25 +99,13 @@ export default {
         this.copiedOffer.sellDate = null;
         this.copiedOffer.valueHighestBid = null;
       } else if (this.confirmAction === "Reset") {
-        this.copiedOffer.title = this.selectedOffer.title;
-        this.copiedOffer.description = this.selectedOffer.description;
-        this.copiedOffer.status = this.selectedOffer.status;
-        this.copiedOffer.sellDate = this.selectedOffer.sellDate;
-        this.copiedOffer.valueHighestBid = this.selectedOffer.valueHighestBid;
+        this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
       } else if (this.confirmAction === "Cancel") {
-        this.copiedOffer.title = this.selectedOffer.title;
-        this.copiedOffer.description = this.selectedOffer.description;
-        this.copiedOffer.status = this.selectedOffer.status;
-        this.copiedOffer.sellDate = this.selectedOffer.sellDate;
-        this.copiedOffer.valueHighestBid = this.selectedOffer.valueHighestBid;
+        this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
         this.$router.push(this.$route.matched[0].path);
         this.$emit('Select-parent-class', this.selectedOffer);
       } else if (this.confirmAction === "Save") {
-        this.selectedOffer.title = this.copiedOffer.title;
-        this.selectedOffer.description = this.copiedOffer.description;
-        this.selectedOffer.status = this.copiedOffer.status;
-        this.selectedOffer.sellDate = this.copiedOffer.sellDate;
-        this.selectedOffer.valueHighestBid = this.copiedOffer.valueHighestBid;
+        Object.assign(this.selectedOffer, this.copiedOffer)
         console.log(this.copiedOffer)
         console.log(this.selectedOffer)
       } else if (this.confirmAction === "Delete") {
@@ -132,6 +120,16 @@ export default {
     },
   },
   computed: {
+    offerDate: {
+      get()
+      {
+        return this.copiedOffer.sellDate.toString()
+      },
+      set(localDate){
+        this.copiedOffer.sellDate = new Date(localDate)
+      }
+
+    },
     sellDateUpdater: {
       get() {
         if (this.copiedOffer && this.copiedOffer.sellDate) {
