@@ -1,6 +1,7 @@
 package app.models;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Offer {
     private int id;
@@ -19,6 +20,16 @@ public class Offer {
         this.valueHighestBid = valueHighestBid;
     }
 
+    public static Offer createSampleOffer(int id){
+        String title = "Exercise " + id;
+        String description = "Description for Offer id: " + id;
+        String status = "Status: " + id;
+        LocalDate startDate = LocalDate.now().plusDays(id);
+        double price = Math.random() * 100;
+
+        return new Offer(id, title, status, description, startDate, price);
+
+    }
     public Offer(String title) {
         this.title = title;
     }
