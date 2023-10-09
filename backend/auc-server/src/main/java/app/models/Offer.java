@@ -12,6 +12,7 @@ public class Offer {
     private double valueHighestBid;
 
     public Offer(int id, String title, String status, String description, LocalDate sellDate, double valueHighestBid) {
+        super();
         this.id = id;
         this.title = title;
         this.status = status;
@@ -56,5 +57,29 @@ public class Offer {
 
     public double getValueHighestBid() {
         return valueHighestBid;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setSellDate(LocalDate sellDate) {
+        this.sellDate = sellDate;
+    }
+
+    public void setValueHighestBid(double valueHighestBid) {
+        this.valueHighestBid = valueHighestBid;
     }
 }
