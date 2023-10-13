@@ -43,9 +43,8 @@ public class offersController {
         if (offer != null) {
             return ResponseEntity.ok(offer);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
-
     }
 
     @PostMapping("/offers")
@@ -68,11 +67,14 @@ public class offersController {
     public ResponseEntity<Offer> updateOffer(@PathVariable int id, @RequestBody Offer updatedOffer) {
         Offer existingOffer = offersRepository.findById(id);
         if (existingOffer != null) {
+            if (id != updatedOffer.getId()) {
+                throw new PreConditionFailedException("ID in path does not match ID in request.");
+            }
             updatedOffer.setId(id);
             Offer savedOffer = offersRepository.save(updatedOffer);
             return ResponseEntity.ok(savedOffer);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
     }
 
@@ -83,10 +85,7 @@ public class offersController {
             offersRepository.delete(id);
             return ResponseEntity.ok(offerToDelete);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
     }
-
-
-
 }
