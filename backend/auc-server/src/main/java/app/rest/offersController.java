@@ -1,8 +1,10 @@
 package app.rest;
 
 import app.models.Offer;
+import app.models.Views;
 import app.repository.OffersRepository;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,12 @@ public class offersController {
     @GetMapping("/all")
     public List<Offer> getAllOffers() {
        return offersRepository.findAll();
+    }
+
+    @JsonView(Views.Summary.class)
+    @GetMapping("/summary")
+    public List<Offer> getOffersSummary() {
+        return offersRepository.findAll();
     }
 
     @GetMapping("/{id}")

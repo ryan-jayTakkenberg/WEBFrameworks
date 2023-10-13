@@ -1,5 +1,7 @@
 package app.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.time.LocalDate;
 
 public class Offer {
@@ -51,10 +53,12 @@ public class Offer {
         this.title = title;
     }
 
+    @JsonView(Views.Summary.class)
     public int getId() {
         return id;
     }
 
+    @JsonView(Views.Summary.class)
     public String getTitle() {
         return title;
     }
@@ -95,6 +99,7 @@ public class Offer {
         this.valueHighestBid = valueHighestBid;
     }
 
+    @JsonView(Views.Summary.class)
     public Status getStatus() {
         return status;
     }
