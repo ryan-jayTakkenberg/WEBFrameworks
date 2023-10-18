@@ -1,5 +1,7 @@
 package app.rest;
 
+import app.Exceptions.PreConditionFailedException;
+import app.Exceptions.ResourceNotFoundException;
 import app.models.Offer;
 import app.models.Views;
 import app.repository.OffersRepository;
