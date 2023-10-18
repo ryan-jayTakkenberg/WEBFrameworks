@@ -39,8 +39,15 @@ public class OffersRepositoryMock implements OffersRepository {
     public Offer save(Offer offer) {
         if (offer.getId() == 0) {
             offer.setId(offerIdCount++);
+            offers.add(offer);
+        } else {
+            for (int i = 0; i < offers.size(); i++) {
+                if (offers.get(i).getId() == offer.getId()) {
+                    offers.set(i, offer); // Replace the existing offer with the updated one
+                    break;
+                }
+            }
         }
-        offers.add(offer);
         return offer;
     }
 
