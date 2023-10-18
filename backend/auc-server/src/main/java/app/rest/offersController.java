@@ -76,17 +76,21 @@ public class offersController {
         Offer existingOffer = offersRepository.findById(id);
         if (existingOffer != null) {
             if (id != updatedOffer.getId()) {
+                // Het ID in het pad komt niet overeen met het ID in het verzoek.
                 throw new PreConditionFailedException("ID in path does not match ID in request.");
             }
+
             updatedOffer.setId(id);
             Offer savedOffer = offersRepository.save(updatedOffer);
             return ResponseEntity.ok(savedOffer);
         } else {
+            // Het aanbod is niet gevonden.
             throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
     }
 
-@DeleteMapping("/{id}")
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Offer> deleteOffer(@PathVariable long id) {
         Offer offerToDelete = offersRepository.findById(id);
         if (offerToDelete != null) {

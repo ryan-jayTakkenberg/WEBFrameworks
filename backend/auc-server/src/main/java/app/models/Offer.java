@@ -50,7 +50,10 @@ public class Offer {
 
     }
     public Offer(String title) {
+
         this.title = title;
+        Status status = Status.values()[(int)(Math.random() * Status.values().length)];
+        this.status = status;
     }
 
     @JsonView(Views.Summary.class)
