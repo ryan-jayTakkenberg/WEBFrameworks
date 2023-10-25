@@ -10,6 +10,7 @@
         <router-link to="/offers/overview32" active-class="highlight">Offers details(comp)</router-link>
         <router-link to="/offers/overview33" active-class="highlight">Offers edit(router)</router-link>
         <router-link to="/offers/overview34" active-class="highlight">Offers edit(managed)</router-link>
+        <router-link to="/offers/overview37" active-class="highlight">3.7(Don't know a name )</router-link>
       </div>
     </div>
     <div class="dropdown">

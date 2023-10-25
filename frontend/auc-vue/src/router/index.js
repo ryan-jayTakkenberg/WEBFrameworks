@@ -8,6 +8,8 @@ import offersOverview33 from "@/components/offers/OffersOverview33";
 import offersOverview34 from "@/components/offers/OffersOverview34.vue";
 import OffersDetail33 from "@/components/offers/OffersDetail33.vue";
 import OffersDetail34 from "@/components/offers/OffersDetail34";
+import OffersDetail37 from "@/components/offers/OffersDetail37.vue";
+import offersOverview37 from "@/components/offers/OffersOverview37.vue";
 
 const routes = [
     { path: "/", component: WelcomePage },
@@ -24,6 +26,12 @@ const routes = [
             {
                 path: ":id",
                 component: OffersDetail34,
+            }
+        ]},{ path: "/offers/overview37", component: offersOverview37,
+        children: [
+            {
+                path: ":id",
+                component: OffersDetail37,
             }
         ]},
     { path: "/offer/active", },
