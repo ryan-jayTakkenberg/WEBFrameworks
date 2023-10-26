@@ -28,13 +28,16 @@ export class OffersAdaptor {
     async asyncFindAll() {
         console.log('OffersAdaptor.asyncFindAll()...');
         const offersData = await this.fetchJson(this.resourcesUrl);
-        //GET request on the /offers resource
-        // endpoint
-        // awaits resolution of the JSON response
-        return offersData?.map(Offer.copyConstructor());
-        //map plain JSON data-only objects
-        // into true instances of the Book class
+
+        if (Array.isArray(offersData)) {// checkt op array voorkomt daarom errors
+            return offersData.map(Offer.copyConstructor);
+        } else {
+            console.error('Geen geldige JSON-array ontvangen.');
+            return [];
+        }
     }
+
+
 
     async asyncFindById(id) {
         console.log('OffersAdaptor.asyncFindById(' + id + ')...');

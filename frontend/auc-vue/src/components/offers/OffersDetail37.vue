@@ -65,6 +65,8 @@
 import {Offer} from "@/models/offers";
 
 export default {
+  name: "offersDetail37",
+  inject:  ['offersService'],
   props: ['offerList'],
 
   data() {

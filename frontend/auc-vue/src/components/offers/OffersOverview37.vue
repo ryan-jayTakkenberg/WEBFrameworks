@@ -38,21 +38,31 @@
 import {Offer} from "@/models/offers";
 
 export default {
+  name: "offersOverview37",
+  inject:  ['offersService'],
   data() {
     return {
       offers: [],
       offerId: 3000,
       selectedOffer: null,
     };
-  }, created() {
-    let amountOfOffers = 6;
-
-    for (let i = 0; i < amountOfOffers; i++) {
-      const newOffer = Offer.createSampleOffer(this.offerId);
-      this.offers.push(newOffer);
-      this.offerId += Math.floor(Math.random() * 3 + 1);
+  },async created() {
+    try {
+      this.offers = await this.offersService.asyncFindAll();
+      this.selectedOffer = this.onSelect(this.$route);
+    } catch (error) {
+      console.error('Fout bij het ophalen van aanbiedingen:', error);
     }
   },
+  // }, created() {
+  //   let amountOfOffers = 6;
+  //
+  //   for (let i = 0; i < amountOfOffers; i++) {
+  //     const newOffer = Offer.createSampleOffer(this.offerId);
+  //     this.offers.push(newOffer);
+  //     this.offerId += Math.floor(Math.random() * 3 + 1);
+  //   }
+  // },
   methods: {
     onSelect(offer) {
       if (this.selectedOffer === offer) {
