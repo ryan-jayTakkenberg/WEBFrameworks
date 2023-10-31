@@ -37,22 +37,27 @@ export class OffersAdaptor {
         }
     }
 
-
-
     async asyncFindById(id) {
         console.log('OffersAdaptor.asyncFindById(' + id + ')...');
         return this.fetchJson(this.resourcesUrl + "/" + id);
     }
 
     async asyncSave(offer) {
-        console.log('OffersAdaptor.asyncSave(' + offer + ')...');
-        return this.fetchJson(this.resourcesUrl, {
-            method: 'POST',
-            body: JSON.stringify(offer),
+        let url = `${this.resourcesUrl}/offers`;
+
+        if (offer.id !== 0) {
+            url += `/${offer.id}`;
+        }
+
+        const options = {
+            method: offer.id === 0 ? 'POST' : 'PUT',
             headers: {
                 'Content-Type': 'application/json'
-            }
-        });
+            },
+            body: JSON.stringify(offer)
+        };
+
+        return this.fetchJson(url, options);
     }
 
     async asyncDeleteById(id) {

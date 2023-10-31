@@ -1,5 +1,6 @@
 package app.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ public class Offer {
     private String title;
     private Status status;
     private String description;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate sellDate;
     private double valueHighestBid;
 

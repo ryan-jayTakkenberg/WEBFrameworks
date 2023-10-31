@@ -54,15 +54,6 @@ export default {
       console.error('Fout bij het ophalen van aanbiedingen:', error);
     }
   },
-  // }, created() {
-  //   let amountOfOffers = 6;
-  //
-  //   for (let i = 0; i < amountOfOffers; i++) {
-  //     const newOffer = Offer.createSampleOffer(this.offerId);
-  //     this.offers.push(newOffer);
-  //     this.offerId += Math.floor(Math.random() * 3 + 1);
-  //   }
-  // },
   methods: {
     onSelect(offer) {
       if (this.selectedOffer === offer) {
@@ -73,12 +64,21 @@ export default {
         this.$router.push(this.$route.matched[0].path + "/" + offer.id);
       }
     },
-    addNewOffer() {
-      const newOffer = Offer.createSampleOffer(this.offerId);
-      this.offers.push(newOffer);
-      this.offerId += Math.floor(Math.random() * 3 + 1);
-      this.selectedOffer = newOffer; // autmomatisch selecteren nieuwe offer
-      this.$router.push(this.$route.matched[0].path + "/" + newOffer.id)
+    async addNewOffer() {
+      const newOffer = Offer.createSampleOffer(0);
+
+      try {
+        const saveNewOffer = await this.offersService.asyncSave(newOffer)
+
+        newOffer.id = saveNewOffer.id;
+
+        this.offers.push(newOffer);
+        this.selectedOffer = newOffer;
+
+        this.$router.push(this.$route.matched[0].path + "/" + newOffer.id);
+      } catch (error){
+        console.log('Error while adding a new offer ' + error);
+      }
     },
     handleDeleteOffer(offerToDelete) {
       // Remove the offer from the list
