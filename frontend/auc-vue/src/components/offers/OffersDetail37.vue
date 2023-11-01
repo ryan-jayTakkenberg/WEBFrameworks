@@ -30,7 +30,8 @@
           <th>Sell date:</th>
 
           <td><input type="date" class="inputfieldDate"
-                     v-model="offerDate"><br>{{ copiedOffer.sellDate }}
+                     v-model="offerDate">
+            {{ formatDate(copiedOffer.sellDate) }}
           </td>
         </tr>
         <tr>
@@ -107,12 +108,13 @@ export default {
         this.$router.push(this.$route.matched[0].path);
         this.$emit('Select-parent-class', this.selectedOffer);
       } else if (this.confirmAction === "Save") {
-        Object.assign(this.selectedOffer, this.copiedOffer)
+        this.handleSaveOffer(this.copiedOffer)
         console.log(this.copiedOffer)
         console.log(this.selectedOffer)
       } else if (this.confirmAction === "Delete") {
-        this.$emit('delete-offer', this.selectedOffer);
+        this.handleDeleteOffer(this.copiedOffer)
       }
+     location.reload();
       this.isConfirmationVisible = false;
       this.unsavedChanges = false;
     },
@@ -120,18 +122,60 @@ export default {
       // Display a custom confirmation message
       event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
     },
-  },
-  computed: {
-    offerDate: {
-      get()
-      {
-        return this.copiedOffer.sellDate.toString()
-      },
-      set(localDate){
-        this.copiedOffer.sellDate = new Date(localDate)
+    formatDate(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${day}-${month}-${year}`;
+    },
+    async handleDeleteOffer(offerToDelete) {
+      // Remove the offer from the list
+      try {
+        // Verwijder de aanbieding met de gegeven ID
+        await this.offersService.asyncDeleteById(offerToDelete.id);
+
+        // Unselect de verwijderde aanbieding
+        if (this.selectedOffer && this.selectedOffer.id === offerToDelete.id) {
+          this.selectedOffer = null;
+          this.$router.push(this.$route.matched[0].path);
+        }
+      } catch (error) {
+        console.log('Error while deleting an offer: ' + error);
       }
 
     },
+    async handleSaveOffer(offer){
+      try {
+        console.log("Saving offer:", offer);
+        await this.offersService.asyncSave(offer);
+        this.unsavedChanges = false;
+        console.log("Offer saved successfully.");
+      } catch (error) {
+        console.log("Error while saving the offer: " + error);
+      }
+    }
+  },
+  computed: {
+    offerDate: {
+      get() {
+        if (this.copiedOffer.sellDate) {
+          return this.formatDate(this.copiedOffer.sellDate);
+        }
+        return '';
+      },
+      set(localDate) {
+        // Parse the "Day-month-year" format to create a Date object
+        const parts = localDate.split('-');
+        if (parts.length === 3) {
+          const day = parseInt(parts[0], 10);
+          const month = parseInt(parts[1], 10) - 1; // Month is zero-based
+          const year = parseInt(parts[2], 10);
+          this.copiedOffer.sellDate = new Date(year, month, day);
+        }
+      }
+
+
+  },
     sellDateUpdater: {
       get() {
         if (this.copiedOffer && this.copiedOffer.sellDate) {

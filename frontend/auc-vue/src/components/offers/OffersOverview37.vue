@@ -25,7 +25,6 @@
         <router-view
             :offerList="offers"
             :selectedOffer="selectedOffer"
-            @delete-offer="handleDeleteOffer"
             @update-sell-date="handleUpdateSellDate"
             @Select-parent-class="SelectParentClass"
         ></router-view>
@@ -68,28 +67,22 @@ export default {
       const newOffer = Offer.createSampleOffer(0);
 
       try {
-        const saveNewOffer = await this.offersService.asyncSave(newOffer)
+        const saveNewOffer = await this.offersService.asyncSave(newOffer);
 
-        newOffer.id = saveNewOffer.id;
+        if (saveNewOffer.id) {
+          // Update the offer's 'id' with the one returned by the server
+          newOffer.id = saveNewOffer.id;
+        }
 
         this.offers.push(newOffer);
         this.selectedOffer = newOffer;
 
         this.$router.push(this.$route.matched[0].path + "/" + newOffer.id);
-      } catch (error){
-        console.log('Error while adding a new offer ' + error);
+      } catch (error) {
+        console.log('Error while adding a new offer: ' + error);
       }
     },
-    handleDeleteOffer(offerToDelete) {
-      // Remove the offer from the list
-      this.offers = this.offers.filter((offer) => offer.id !== offerToDelete.id);
-
-      // Unselect the deleted offer
-      if (this.selectedOffer && this.selectedOffer.id === offerToDelete.id) {
-        this.selectedOffer = null;
-        this.$router.push(this.$route.matched[0].path);
-      }
-    }, SelectParentClass(offerToCancel) {
+    SelectParentClass(offerToCancel) {
       {
         if (this.selectedOffer && this.selectedOffer.id === offerToCancel.id) {
           this.selectedOffer = null;

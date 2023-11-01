@@ -34,11 +34,18 @@ export class Offer {
         const description = "dummyDescription";
 
         const valueBid = Math.floor(Math.random() * 1000);
-        const valueHighestBid = status === Offer.Status.NEW ? null : `\u20AC ${valueBid}`;
+        const valueHighestBid = status === Offer.Status.NEW ? null : `${valueBid}`;
 
-        // formatting the date according to given example
-        const date = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000 + Math.random() * (30 * 24 * 60 * 60 * 1000));
-        const sellDate = date.toLocaleDateString("en-US", this.DateFormat);
+        const today = new Date();
+        const startDate = new Date(today - 30 * 24 * 60 * 60 * 1000);
+        const randomTimestamp = startDate.getTime() + Math.random() * (today - startDate.getTime());
+        const randomDate = new Date(randomTimestamp);
+
+        const year = randomDate.getFullYear();
+        const month = String(randomDate.getMonth() + 1).padStart(2, '0');
+        const day = String(randomDate.getDate()).padStart(2, '0');
+
+        const sellDate = `${year}-${month}-${day}`;
 
         return new Offer(id, title, status, description, sellDate, valueHighestBid);
     }
