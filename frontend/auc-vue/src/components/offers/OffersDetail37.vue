@@ -118,10 +118,6 @@ export default {
       this.isConfirmationVisible = false;
       this.unsavedChanges = false;
     },
-    beforeWindowload(event) {
-      // Display a custom confirmation message
-      event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
-    },
     formatDate(date) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
