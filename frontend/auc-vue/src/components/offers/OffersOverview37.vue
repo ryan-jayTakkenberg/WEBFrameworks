@@ -27,6 +27,7 @@
             :selectedOffer="selectedOffer"
             @update-sell-date="handleUpdateSellDate"
             @Select-parent-class="SelectParentClass"
+            @update-offer-list="getOfferList"
         ></router-view>
       </div>
     </div>
@@ -46,12 +47,7 @@ export default {
       selectedOffer: null,
     };
   },async created() {
-    try {
-      this.offers = await this.offersService.asyncFindAll();
-      this.selectedOffer = this.onSelect(this.$route);
-    } catch (error) {
-      console.error('Fout bij het ophalen van aanbiedingen:', error);
-    }
+    await this.getOfferList();
   },
   methods: {
     onSelect(offer) {
@@ -94,8 +90,16 @@ export default {
       if (this.selectedOffer) {
         this.selectedOffer.sellDate = dateString;
       }
+    },
+    async getOfferList(){
+      try {
+        this.offers = await this.offersService.asyncFindAll();
+        this.selectedOffer = this.onSelect(this.$route);
+      } catch (error) {
+        console.error('Fout bij het ophalen van aanbiedingen:', error);
+      }
     }
-  }
+  },
 };
 </script>
 

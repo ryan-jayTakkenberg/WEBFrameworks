@@ -41,11 +41,11 @@
         </tr>
         </tbody>
       </table>
-      <button @click="confirmation('Save')" :disabled="!hasChanged">Save</button>
-      <button @click="confirmation('Clear')">Clear</button>
-      <button @click="confirmation('Reset')" :disabled="!hasChanged">Reset</button>
-      <button @click="confirmation('Cancel')" :disabled="!hasChanged">Cancel</button>
-      <button @click="confirmation('Delete')">Delete</button>
+      <button @click="handleSaveOffer(this.copiedOffer)" :disabled="!hasChanged">Save</button>
+      <button @click="handleClear">Clear</button>
+      <button @click="handleReset" :disabled="!hasChanged">Reset</button>
+      <button @click="handleCancel" :disabled="!hasChanged">Cancel</button>
+      <button @click="handleDeleteOffer(this.copiedOffer)">Delete</button>
 
       <div v-if="isConfirmationVisible" class="confirmation-dialog">
         <div class="confirmation-content">
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       offerStatusArray: Object.values(Offer.Status),
-      selectedOffer: { // Your selected offer object
+      selectedOffer: {
         title: '',
         description: '',
         status: '',
@@ -94,47 +94,31 @@ export default {
     cancel() {
       this.isConfirmationVisible = false;
     },
-    confirm() {
-      if (this.confirmAction === "Clear") {
-        this.copiedOffer.title = null;
-        this.copiedOffer.description = null;
-        this.copiedOffer.status = null;
-        this.copiedOffer.sellDate = null;
-        this.copiedOffer.valueHighestBid = null;
-      } else if (this.confirmAction === "Reset") {
-        this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
-      } else if (this.confirmAction === "Cancel") {
-        this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
-        this.$router.push(this.$route.matched[0].path);
-        this.$emit('Select-parent-class', this.selectedOffer);
-      } else if (this.confirmAction === "Save") {
-        this.handleSaveOffer(this.copiedOffer)
-        console.log(this.copiedOffer)
-        console.log(this.selectedOffer)
-      } else if (this.confirmAction === "Delete") {
-        this.handleDeleteOffer(this.copiedOffer)
-      }
-     location.reload();
-      this.isConfirmationVisible = false;
-      this.unsavedChanges = false;
-    },
     formatDate(date) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
       return `${day}-${month}-${year}`;
     },
+    handleClear(){
+      this.copiedOffer.title = null;
+      this.copiedOffer.description = null;
+      this.copiedOffer.status = null;
+      this.copiedOffer.sellDate = null;
+      this.copiedOffer.valueHighestBid = null;
+    },
+    handleReset(){
+      this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
+    },
+    handleCancel(){
+      this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
+      this.$router.push(this.$route.matched[0].path);
+      this.$emit('Select-parent-class', this.selectedOffer);
+    },
     async handleDeleteOffer(offerToDelete) {
-      // Remove the offer from the list
       try {
-        // Verwijder de aanbieding met de gegeven ID
         await this.offersService.asyncDeleteById(offerToDelete.id);
-
-        // Unselect de verwijderde aanbieding
-        if (this.selectedOffer && this.selectedOffer.id === offerToDelete.id) {
-          this.selectedOffer = null;
-          this.$router.push(this.$route.matched[0].path);
-        }
+        this.$emit('update-offer-list')
       } catch (error) {
         console.log('Error while deleting an offer: ' + error);
       }
@@ -142,15 +126,23 @@ export default {
     },
     async handleSaveOffer(offer){
       try {
-        console.log("Saving offer:", offer);
         await this.offersService.asyncSave(offer);
         this.unsavedChanges = false;
-        console.log("Offer saved successfully.");
+        this.$emit('update-offer-list')
       } catch (error) {
         console.log("Error while saving the offer: " + error);
       }
+    },
+    async loadOfferDetail(id){
+      try {
+        const offer = await this.offersService.asyncFindById(id);
+        return offer;
+      }catch (error){
+        console.log("Error with loading the detail. " + error)
+      }
     }
   },
+
   computed: {
     offerDate: {
       get() {
@@ -160,17 +152,14 @@ export default {
         return '';
       },
       set(localDate) {
-        // Parse the "Day-month-year" format to create a Date object
         const parts = localDate.split('-');
         if (parts.length === 3) {
           const day = parseInt(parts[0], 10);
-          const month = parseInt(parts[1], 10) - 1; // Month is zero-based
+          const month = parseInt(parts[1], 10) - 1;
           const year = parseInt(parts[2], 10);
           this.copiedOffer.sellDate = new Date(year, month, day);
         }
       }
-
-
   },
     sellDateUpdater: {
       get() {
@@ -213,6 +202,7 @@ export default {
       }
     },
   },
+
   watch: {
     '$route.params.id'() {
       this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
@@ -220,10 +210,13 @@ export default {
       this.unsavedChanges = false;
     }
   },
+
   created() {
     this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
     this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
-  }, beforeRouteUpdate(to, from, next) {
+  },
+
+  beforeRouteUpdate(to, from, next) {
     // Check if there are unsaved changes
     if (this.unsavedChanges) {
       // Prompt the user for confirmation
@@ -262,12 +255,12 @@ export default {
       // User canceled, stay on the current route
       next();
     }
-  }, mounted() {
+  },
+  mounted() {
     window.addEventListener('beforeunload', this.beforeWindowload);
   }, beforeUnmount() {
     window.addEventListener('beforeunload', this.beforeWindowload);
   }
-
 };
 </script>
 
