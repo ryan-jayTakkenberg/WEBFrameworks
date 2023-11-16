@@ -10,7 +10,6 @@ public class Offer {
     private String title;
     private Status status;
     private String description;
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate sellDate;
     private double valueHighestBid;
 

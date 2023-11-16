@@ -1,6 +1,7 @@
 <template>
   <HeaderComponent/>
   <NavBarComponent/>
+
   <router-view></router-view>
 </template>
 

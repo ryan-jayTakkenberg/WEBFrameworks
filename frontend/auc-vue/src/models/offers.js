@@ -1,9 +1,10 @@
+
 export class Offer {
     id;
     title;
     status;
     description;
-    sellDate;
+    _sellDate;
     valueHighestBid;
 
     static Status = {
@@ -22,8 +23,18 @@ export class Offer {
         this.title = title;
         this.status = status;
         this.description = description;
-        this.sellDate = sellDate;
         this.valueHighestBid = valueHighestBid;
+        this.sellDate = sellDate;
+    }
+
+    get sellDate() {
+        return `${this._sellDate.getFullYear()}-` +
+        `${this._sellDate.getMonth()+1}-`+
+        `${this._sellDate.getDate()}`
+    }
+
+    set sellDate(value) {
+        this._sellDate = new Date(value)
     }
 
     static createSampleOffer(pId = 0) {
@@ -61,7 +72,14 @@ export class Offer {
             return null;
         }
     }
-
-
-
+    toJsonString(){
+        return JSON.stringify({
+            id: this.id,
+            title: this.title,
+            status: this.status,
+            description: this.description,
+            sellDate: this.sellDate,
+            valueHighestBid: this.valueHighestBid
+        })
+    }
 }

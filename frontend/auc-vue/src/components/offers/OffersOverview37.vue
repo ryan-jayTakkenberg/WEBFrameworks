@@ -25,8 +25,7 @@
         <router-view
             :offerList="offers"
             :selectedOffer="selectedOffer"
-            @update-sell-date="handleUpdateSellDate"
-            @Select-parent-class="SelectParentClass"
+            @deselect="deselectOffer"
             @update-offer-list="getOfferList"
         ></router-view>
       </div>
@@ -45,8 +44,12 @@ export default {
       offers: [],
       selectedOffer: null,
     };
-  },async created() {
+  },
+  async created() {
     await this.getOfferList();
+    if (this.$route.params.id){
+      this.selectedOffer = await this.offersService.asyncFindById(parseInt(this.$route.params.id));
+    }
   },
   methods: {
     onSelect(offer) {
@@ -59,17 +62,14 @@ export default {
       }
     },
     async addNewOffer() {
-      const newOffer = Offer.createSampleOffer(0);
+      let newOffer = Offer.createSampleOffer(0);
+      console.log(newOffer.sellDate)
 
       try {
-        const saveNewOffer = await this.offersService.asyncSave(newOffer);
+        newOffer = await this.offersService.asyncSave(newOffer);
 
-        if (saveNewOffer.id) {
-          // Update the offer's 'id' with the one returned by the server
-          newOffer.id = saveNewOffer.id;
-        }
 
-        this.offers.push(newOffer);
+        await this.getOfferList()
         this.selectedOffer = newOffer;
 
         this.$router.push(this.$route.matched[0].path + "/" + newOffer.id);
@@ -77,28 +77,20 @@ export default {
         console.log('Error while adding a new offer: ' + error);
       }
     },
-    SelectParentClass(offerToCancel) {
-      {
-        if (this.selectedOffer && this.selectedOffer.id === offerToCancel.id) {
-          this.selectedOffer = null;
-          this.$router.push(this.$route.matched[0].path);
-        }
-      }
-    },
-    handleUpdateSellDate(dateString) {
-      if (this.selectedOffer) {
-        this.selectedOffer.sellDate = dateString;
-      }
+    deselectOffer() {
+      this.selectedOffer = null;
     },
     async getOfferList(){
-      try {
-        this.offers = await this.offersService.asyncFindAll();
-        this.selectedOffer = this.onSelect(this.$route);
-      } catch (error) {
-        console.error('Fout bij het ophalen van aanbiedingen:', error);
-      }
+      this.offers = await this.offersService.asyncFindAll();
     }
   },
+  watch: {
+    '$route.params.id'() {
+      if (!this.$route.params.id){
+        this.deselectOffer()
+      }
+    }
+  }
 };
 </script>
 

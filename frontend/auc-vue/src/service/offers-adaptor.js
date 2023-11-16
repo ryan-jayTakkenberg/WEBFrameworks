@@ -37,26 +37,25 @@ export class OffersAdaptor {
 
     async asyncSave(offer) {
         let url = `${this.resourcesUrl}`;
+        let method = ""
+
         if (offer.id !== 0) {
+            method = 'PUT'
             // Append the offer ID to the URL if it's not zero
             url += `/${offer.id}`;
         }else {
-            url += `/offers`;
+            method = 'POST'
         }
-        const method = offer.id === 0 ? 'POST' : 'PUT';
+
         const options = {
             method,
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(offer)
+            body: offer.toJsonString()
         };
-        const response = await this.fetchJson(url, options);
-        if (method === 'POST' && response.id) {
-            // If it's a POST request and the response contains the 'id', update the offer's 'id'
-            offer.id = response.id;
-        }
-        return response;
+
+        return await this.fetchJson(url, options);
     }
 
     async asyncDeleteById(id) {

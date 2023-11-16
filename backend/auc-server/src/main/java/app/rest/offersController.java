@@ -57,7 +57,7 @@ public class offersController {
         }
     }
 
-    @PostMapping("/offers")
+    @PostMapping("")
     public ResponseEntity<Offer> addNewOffer(@RequestBody Offer offer ){
         if (offer == null) {
             return ResponseEntity.badRequest().build(); // Return 400 Bad Request for malformed requests

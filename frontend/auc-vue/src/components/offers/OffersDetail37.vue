@@ -30,8 +30,7 @@
           <th>Sell date:</th>
 
           <td><input type="date" class="inputfieldDate"
-                     v-model="offerDate">
-            {{ formatDate(copiedOffer.sellDate) }}
+                     v-model="copiedOffer.sellDate">
           </td>
         </tr>
         <tr>
@@ -47,16 +46,6 @@
       <button @click="handleCancel" :disabled="!hasChanged">Cancel</button>
       <button @click="handleDeleteOffer(this.copiedOffer)">Delete</button>
 
-      <div v-if="isConfirmationVisible" class="confirmation-dialog">
-        <div class="confirmation-content">
-          <p v-if="this.confirmAction === 'Delete' ">Are you sure you want to delete this action on id
-            {{ this.selectedOffer.id }}</p>
-          <p v-else>Are you sure you want to perform this action on id {{ this.selectedOffer.id }}</p>
-          <button @click="confirm">Confirm</button>
-          <button @click="cancel">Cancel</button>
-        </div>
-      </div>
-
 
     </div>
   </div>
@@ -69,37 +58,16 @@ export default {
   name: "offersDetail37",
   inject:  ['offersService'],
   props: ['offerList'],
+  emits: ['update-offer-list', 'deselect'],
 
   data() {
     return {
       offerStatusArray: Object.values(Offer.Status),
-      selectedOffer: {
-        title: '',
-        description: '',
-        status: '',
-        sellDate: '',
-        valueHighestBid: '',
-      },
+      selectedOffer: null,
       copiedOffer: null,
-      isConfirmationVisible: false,
-      confirmAction: String,
-      unsavedChanges: false,
     }
   },
   methods: {
-    confirmation(action) {
-      this.confirmAction = action;
-      this.isConfirmationVisible = true;
-    },
-    cancel() {
-      this.isConfirmationVisible = false;
-    },
-    formatDate(date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${day}-${month}-${year}`;
-    },
     handleClear(){
       this.copiedOffer.title = null;
       this.copiedOffer.description = null;
@@ -111,13 +79,13 @@ export default {
       this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
     },
     handleCancel(){
-      this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
       this.$router.push(this.$route.matched[0].path);
-      this.$emit('Select-parent-class', this.selectedOffer);
     },
+
     async handleDeleteOffer(offerToDelete) {
       try {
         await this.offersService.asyncDeleteById(offerToDelete.id);
+        this.$router.push(this.$route.matched[0].path);
         this.$emit('update-offer-list')
       } catch (error) {
         console.log('Error while deleting an offer: ' + error);
@@ -127,7 +95,6 @@ export default {
     async handleSaveOffer(offer){
       try {
         await this.offersService.asyncSave(offer);
-        this.unsavedChanges = false;
         this.$emit('update-offer-list')
       } catch (error) {
         console.log("Error while saving the offer: " + error);
@@ -135,123 +102,64 @@ export default {
     },
     async loadOfferDetail(id){
       try {
-        const offer = await this.offersService.asyncFindById(id);
-        return offer;
+        this.selectedOffer = await this.offersService.asyncFindById(id);
+        this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
+        this.unsavedChanges = false;
       }catch (error){
         console.log("Error with loading the detail. " + error)
       }
     }
   },
-
   computed: {
-    offerDate: {
-      get() {
-        if (this.copiedOffer.sellDate) {
-          return this.formatDate(this.copiedOffer.sellDate);
-        }
-        return '';
-      },
-      set(localDate) {
-        const parts = localDate.split('-');
-        if (parts.length === 3) {
-          const day = parseInt(parts[0], 10);
-          const month = parseInt(parts[1], 10) - 1;
-          const year = parseInt(parts[2], 10);
-          this.copiedOffer.sellDate = new Date(year, month, day);
-        }
-      }
-  },
-    sellDateUpdater: {
-      get() {
-        if (this.copiedOffer && this.copiedOffer.sellDate) {
-          return this.copiedOffer.sellDate;
-        }
-        return '';
-      },
-      set(localDateTime) {
-        this.$emit('update-sell-date', localDateTime);
-      },
-    },
     hasChanged() {
-      if (
+      return (
           this.selectedOffer.title !== this.copiedOffer.title ||
           this.selectedOffer.description !== this.copiedOffer.description ||
           this.selectedOffer.status !== this.copiedOffer.status ||
-          // this.selectedOffer.sellDate !== this.copiedOffer.sellDate ||
+          this.selectedOffer.sellDate !== this.copiedOffer.sellDate ||
           this.selectedOffer.valueHighestBid !== this.copiedOffer.valueHighestBid
-      ) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.unsavedChanges = true;
-        return true; // There are changes
-      } else {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        return false; // No changes
-      }
+      )
     },
-    isFormFilled() {
-      if (this.selectedOffer) {
-        return (
-            this.selectedOffer.title &&
-            this.selectedOffer.description &&
-            this.selectedOffer.status &&
-            this.selectedOffer.sellDate &&
-            this.selectedOffer.valueHighestBid
-        );
-      } else {
-        return false;
-      }
-    },
+
   },
   watch: {
     async '$route.params.id'() {
-      this.selectedOffer = await this.loadOfferDetail(this.$route.params.id)
-      this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
-      this.unsavedChanges = false;
+      if (this.$route.params.id){
+        await this.loadOfferDetail(this.$route.params.id)
+      }
     }
   },
-  created() {
-    this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
-    this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
+
+  async created() {
+      await this.loadOfferDetail(this.$route.params.id)
   },
+
   beforeRouteUpdate(to, from, next) {
-    // Check if there are unsaved changes
-    if (this.unsavedChanges) {
-      // Prompt the user for confirmation
-      if (window.confirm('You have unsaved changes. Do you really want to leave?')) {
-        // User confirmed, allow route update if the form is filled
-        if (this.isFormFilled) {
-          this.unsavedChanges = false; // Reset the flag
-          next();
-        } else {
-          // Display an alert and prevent route update
-          alert('Please fill in all form fields before leaving.');
-          next(false);
-        }
-      } else {
-        // User canceled, stay on the current route
-        next();
-        this.unsavedChanges = false;
-      }
-    } else {
-      // No unsaved changes, allow route update
-      next();
-    }
-  },
-  beforeRouteLeave(to, from, next) {
-    if (this.unsavedChanges) {
+    let cancelRouting = true
+
+    if (this.hasChanged) {
       // Prompt the user for confirmation before leaving the route
-      if (window.confirm('Do you really want to leave this page?')) {
+      if (!window.confirm('Do you really want to leave this page?')) {
         // User confirmed, allow route leave
-        next();
-      } else {
-        // User canceled, stay on the current route
-        next();
+        cancelRouting = false
       }
-    } else {
-      // User canceled, stay on the current route
-      next();
     }
+    next(cancelRouting);
   },
+
+  beforeRouteLeave(to, from, next) {
+    let cancelRouting = true
+
+    if (this.hasChanged) {
+      // Prompt the user for confirmation before leaving the route
+      if (!window.confirm('Do you really want to leave this page?')) {
+        // User confirmed, allow route leave
+        cancelRouting = false
+      }
+    }
+    next(cancelRouting);
+  },
+
   mounted() {
     window.addEventListener('beforeunload', this.beforeWindowload);
   }, beforeUnmount() {
