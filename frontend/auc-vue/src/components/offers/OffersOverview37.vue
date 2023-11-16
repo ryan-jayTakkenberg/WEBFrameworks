@@ -43,7 +43,6 @@ export default {
   data() {
     return {
       offers: [],
-      offerId: 3000,
       selectedOffer: null,
     };
   },async created() {

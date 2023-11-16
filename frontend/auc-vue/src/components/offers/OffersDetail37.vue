@@ -202,20 +202,17 @@ export default {
       }
     },
   },
-
   watch: {
-    '$route.params.id'() {
-      this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id));
+    async '$route.params.id'() {
+      this.selectedOffer = await this.loadOfferDetail(this.$route.params.id)
       this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
       this.unsavedChanges = false;
     }
   },
-
   created() {
     this.selectedOffer = this.offerList.find(offer => offer.id === parseInt(this.$route.params.id))
     this.copiedOffer = Offer.copyConstructor(this.selectedOffer);
   },
-
   beforeRouteUpdate(to, from, next) {
     // Check if there are unsaved changes
     if (this.unsavedChanges) {
@@ -240,7 +237,6 @@ export default {
       next();
     }
   },
-
   beforeRouteLeave(to, from, next) {
     if (this.unsavedChanges) {
       // Prompt the user for confirmation before leaving the route
