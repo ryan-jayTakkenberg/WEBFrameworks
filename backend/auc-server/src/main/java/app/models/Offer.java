@@ -23,7 +23,7 @@ public class Offer {
     private double valueHighestBid;
     @OneToMany(mappedBy = "offer")
     @JsonBackReference
-    private Set<Bid> bids = new HashSet<>();
+    private List<Bid> bids = new ArrayList<>();
 
     public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
         this.id = id;
@@ -80,7 +80,7 @@ public class Offer {
     public int getId() {
         return id;
     }
-    public Set<Bid> getBids() {
+    public List<Bid> setBids() {
         return bids;
     }
 

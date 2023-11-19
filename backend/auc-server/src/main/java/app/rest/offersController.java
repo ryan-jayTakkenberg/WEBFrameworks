@@ -2,8 +2,10 @@ package app.rest;
 
 import app.Exceptions.PreConditionFailedException;
 import app.Exceptions.ResourceNotFoundException;
+import app.models.Bid;
 import app.models.Offer;
 import app.models.Views;
+import app.repository.BidsRepositoryJpa;
 import app.repository.OffersRepository;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -14,7 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-
+import java.util.Objects;
 
 
 @RestController
@@ -22,6 +24,7 @@ import java.util.List;
 public class offersController {
 
     private final OffersRepository offersRepository;
+
 
     @GetMapping("/test")
     public List<Offer> getTestOffer(){
@@ -32,7 +35,7 @@ public class offersController {
     }
 
     @Autowired
-    public offersController(OffersRepository offersRepository){
+    public offersController(OffersRepository offersRepository ){
         this.offersRepository = offersRepository;
     }
 
@@ -102,4 +105,25 @@ public class offersController {
             throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
     }
+    @PostMapping("/{id}/bids")
+    public ResponseEntity<Bid> updateBid(@PathVariable long id,@RequestBody Bid value ) {
+        Offer offer = offersRepository.findById(id);
+
+        if (offer == null) {
+            throw new PreConditionFailedException("Offer is null");
+        }
+
+        if (offer.getStatus() == Offer.Status.FOR_SALE) {
+            throw new PreConditionFailedException("Offer is for sale ");
+        }
+
+        if (offer.getValueHighestBid() <= value.getValue()) {
+            throw new PreConditionFailedException("Bid is lower or equal on the previous one ");
+        }
+        offer.addBid(value);
+        offersRepository.save(offer);
+
+        return ResponseEntity.ok(value);
+    }
+
 }

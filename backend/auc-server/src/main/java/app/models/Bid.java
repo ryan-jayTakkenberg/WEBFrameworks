@@ -6,16 +6,17 @@ import jakarta.persistence.*;
 
 @Entity
 public class Bid {
-
     @Id
     @GeneratedValue()
     private Long idBid;
 
     private double value;
-
     @ManyToOne
     @JsonManagedReference
     private Offer offer;
+    public Bid(double value) {
+        this.value = value;
+    }
 
     public Bid() {
         // Default constructor
@@ -23,16 +24,14 @@ public class Bid {
     public boolean associateOffer(Offer offer) {
         if (offer != null && this.getOffer() == null) {
             // Update both sides of the association
-            offer.associateBid(this);
+            offer.addBid(this);
             this.setOffer(offer);
             return true;
         }
         return false;
     }
 
-    public Bid(double value) {
-        this.value = value;
-    }
+
 
     public Long getId() {
         return idBid;
