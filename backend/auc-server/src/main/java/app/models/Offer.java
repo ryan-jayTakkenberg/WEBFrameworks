@@ -1,9 +1,14 @@
 package app.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Offer {
@@ -16,6 +21,9 @@ public class Offer {
     private String description;
     private LocalDate sellDate;
     private double valueHighestBid;
+    @OneToMany(mappedBy = "offer")
+    @JsonBackReference
+    private Set<Bid> bids = new HashSet<>();
 
     public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
         this.id = id;
@@ -29,6 +37,8 @@ public class Offer {
     public Offer(){
 
     }
+
+
 
     public static Offer createSampleOffer(int id){
         String title = "Exercise " + id;
@@ -65,11 +75,31 @@ public class Offer {
         this.status = status;
     }
 
+
     @JsonView(Views.Summary.class)
     public int getId() {
         return id;
     }
+    public Set<Bid> getBids() {
+        return bids;
+    }
 
+    public void addBid(Bid bid) {
+        bids.add(bid);
+        bid.setOffer(this);
+    }
+
+    public void removeBid(Bid bid) {
+        bids.remove(bid);
+        bid.setOffer(null);
+    }
+
+    public void associateBid(Bid bid) {
+        if (bid != null && !bids.contains(bid)) {
+            bids.add(bid);
+            bid.setOffer(this);
+        }
+    }
     @JsonView(Views.Summary.class)
     public String getTitle() {
         return title;
