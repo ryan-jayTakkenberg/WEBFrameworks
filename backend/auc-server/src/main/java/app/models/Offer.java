@@ -1,13 +1,17 @@
 package app.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+@Entity
 public class Offer {
+    @Id
+    @GeneratedValue
     private int id;
     private String title;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private String description;
     private LocalDate sellDate;
@@ -20,6 +24,10 @@ public class Offer {
         this.description = description;
         this.sellDate = sellDate;
         this.valueHighestBid = valueHighestBid;
+    }
+
+    public Offer(){
+
     }
 
     public static Offer createSampleOffer(int id){
