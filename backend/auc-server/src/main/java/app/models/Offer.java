@@ -3,12 +3,10 @@ package app.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 public class Offer {
@@ -21,8 +19,8 @@ public class Offer {
     private String description;
     private LocalDate sellDate;
     private double valueHighestBid;
-    @OneToMany(mappedBy = "offer")
-    @JsonBackReference
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.MERGE)
+    @JsonBackReference()
     private List<Bid> bids = new ArrayList<>();
 
     public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
@@ -113,8 +111,15 @@ public class Offer {
         return sellDate;
     }
 
-    public double getValueHighestBid() {
-        return valueHighestBid;
+    public Double getValueHighestBid() {
+        if (this.bids.isEmpty()) {
+            return null;
+        }
+
+        return this.bids.stream()
+                .mapToDouble(Bid::getValue)
+                .max()
+                .orElse(0.0);
     }
 
     public void setId(int id) {

@@ -10,20 +10,24 @@ import app.repository.OffersRepository;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.rmi.StubNotFoundException;
 import java.util.List;
 import java.util.Objects;
 
 
 @RestController
-@RequestMapping("/offers")
+@RequestMapping("")
 public class offersController {
 
     private final OffersRepository offersRepository;
+    private final BidsRepositoryJpa bidsRepositoryJpa;
 
 
     @GetMapping("/test")
@@ -35,8 +39,9 @@ public class offersController {
     }
 
     @Autowired
-    public offersController(OffersRepository offersRepository ){
+    public offersController(OffersRepository offersRepository, BidsRepositoryJpa bidsRepositoryJpa ){
         this.offersRepository = offersRepository;
+        this.bidsRepositoryJpa = bidsRepositoryJpa;
     }
 
     @GetMapping("")
@@ -105,25 +110,44 @@ public class offersController {
             throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
     }
-    @PostMapping("/{id}/bids")
-    public ResponseEntity<Bid> updateBid(@PathVariable long id,@RequestBody Bid value ) {
-        Offer offer = offersRepository.findById(id);
+    @PostMapping("/{offerId}/bids")
+    public ResponseEntity<Bid> addBidToOffer(@PathVariable long offerId, @RequestBody Bid newBid) {
+        Offer offer = offersRepository.findById(offerId);
 
         if (offer == null) {
-            throw new PreConditionFailedException("Offer is null");
+            throw new PreConditionFailedException("Offer not found");
         }
 
         if (offer.getStatus() == Offer.Status.FOR_SALE) {
-            throw new PreConditionFailedException("Offer is for sale ");
+            throw new PreConditionFailedException("Offer is not for sale");
         }
 
-        if (offer.getValueHighestBid() <= value.getValue()) {
-            throw new PreConditionFailedException("Bid is lower or equal on the previous one ");
+        if (newBid.getValue() <= offer.getValueHighestBid()) {
+            throw new PreConditionFailedException("Bid is lower or equal to the highest bid on the offer");
         }
-        offer.addBid(value);
-        offersRepository.save(offer);
 
-        return ResponseEntity.ok(value);
+
+
+        // Set the bid value explicitly
+        newBid.setBidValue(newBid.getValue());
+
+        // Associate bid with offer
+        newBid.associateOffer(offer);
+
+        // Save the bid to the repository and get the managed instance
+        Bid managedBid = bidsRepositoryJpa.saveBid(newBid);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(managedBid);
+
     }
+
+
+    @GetMapping("/bids")
+    public List<Bid> getAllBids() {
+        return bidsRepositoryJpa.findAllBids();
+
+    }
+
+
 
 }
