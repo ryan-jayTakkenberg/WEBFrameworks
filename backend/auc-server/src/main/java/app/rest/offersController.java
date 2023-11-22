@@ -28,6 +28,7 @@ import java.util.Objects;
 public class offersController {
 
     private final OffersRepository offersRepository;
+    private final BidsRepositoryJpa bidsRepositoryJpa;
 
 
     @GetMapping("/test")
@@ -42,8 +43,9 @@ public class offersController {
     // Assuming you have a repository for Bid entities
 
     @Autowired
-    public offersController(OffersRepository offersRepository) {
+    public offersController(OffersRepository offersRepository, BidsRepositoryJpa bidsRepositoryJpa) {
         this.offersRepository = offersRepository;
+        this.bidsRepositoryJpa = bidsRepositoryJpa;
 
     }
     @GetMapping("")
@@ -138,12 +140,16 @@ public class offersController {
         newBid.associateOffer(offer);
 
         // Save the bid to the repository and get the managed instance
-        Bid managedBid = (Bid) offersRepository.save(newBid);
+        Bid managedBid =  bidsRepositoryJpa.save(newBid);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(managedBid);
 
     }
 
+    @GetMapping("/bids")
+    public List<Bid> getAllBids() {
+        return bidsRepositoryJpa.findAll();
+    }
 
 
 
