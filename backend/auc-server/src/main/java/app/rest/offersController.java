@@ -10,6 +10,7 @@ import app.repository.OffersRepository;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,6 @@ import java.util.Objects;
 public class offersController {
 
     private final OffersRepository offersRepository;
-    private final BidsRepositoryJpa bidsRepositoryJpa;
 
 
     @GetMapping("/test")
@@ -38,12 +38,14 @@ public class offersController {
         );
     }
 
-    @Autowired
-    public offersController(OffersRepository offersRepository, BidsRepositoryJpa bidsRepositoryJpa ){
-        this.offersRepository = offersRepository;
-        this.bidsRepositoryJpa = bidsRepositoryJpa;
-    }
 
+    // Assuming you have a repository for Bid entities
+
+    @Autowired
+    public offersController(OffersRepository offersRepository) {
+        this.offersRepository = offersRepository;
+
+    }
     @GetMapping("")
     public List<Offer> getAllOffers() {
        return offersRepository.findAll();
@@ -57,7 +59,7 @@ public class offersController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Offer> getById(@PathVariable int id ){
-        Offer offer = offersRepository.findById(id);
+        Offer offer = (Offer) offersRepository.findById(id);
         if (offer != null) {
             return ResponseEntity.ok(offer);
         } else {
@@ -70,7 +72,7 @@ public class offersController {
         if (offer == null) {
             return ResponseEntity.badRequest().build(); // Return 400 Bad Request for malformed requests
         }
-        Offer addedOffer = offersRepository.save(offer);
+        Offer addedOffer = (Offer) offersRepository.save(offer);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -83,7 +85,7 @@ public class offersController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Offer> updateOffer(@PathVariable int id, @RequestBody Offer updatedOffer) {
-        Offer existingOffer = offersRepository.findById(id);
+        Offer existingOffer = (Offer) offersRepository.findById(id);
         if (existingOffer != null) {
             if (id != updatedOffer.getId()) {
                 // Het ID in het pad komt niet overeen met het ID in het verzoek.
@@ -91,7 +93,7 @@ public class offersController {
             }
 
             updatedOffer.setId(id);
-            Offer savedOffer = offersRepository.save(updatedOffer);
+            Offer savedOffer = (Offer) offersRepository.save(updatedOffer);
             return ResponseEntity.ok(savedOffer);
         } else {
             // Het aanbod is niet gevonden.
@@ -102,7 +104,7 @@ public class offersController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Offer> deleteOffer(@PathVariable long id) {
-        Offer offerToDelete = offersRepository.findById(id);
+        Offer offerToDelete = (Offer) offersRepository.findById(id);
         if (offerToDelete != null) {
             offersRepository.delete(id);
             return ResponseEntity.ok(offerToDelete);
@@ -110,9 +112,10 @@ public class offersController {
             throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
     }
+
     @PostMapping("/{offerId}/bids")
     public ResponseEntity<Bid> addBidToOffer(@PathVariable long offerId, @RequestBody Bid newBid) {
-        Offer offer = offersRepository.findById(offerId);
+        Offer offer = (Offer) offersRepository.findById(offerId);
 
         if (offer == null) {
             throw new PreConditionFailedException("Offer not found");
@@ -135,18 +138,13 @@ public class offersController {
         newBid.associateOffer(offer);
 
         // Save the bid to the repository and get the managed instance
-        Bid managedBid = bidsRepositoryJpa.saveBid(newBid);
+        Bid managedBid = (Bid) offersRepository.save(newBid);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(managedBid);
 
     }
 
 
-    @GetMapping("/bids")
-    public List<Bid> getAllBids() {
-        return bidsRepositoryJpa.findAllBids();
-
-    }
 
 
 

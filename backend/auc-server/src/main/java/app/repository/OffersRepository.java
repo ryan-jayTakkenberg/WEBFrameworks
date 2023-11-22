@@ -4,11 +4,11 @@ import app.models.Offer;
 
 import java.util.List;
 
-public interface OffersRepository {
-     List<Offer> findAll();
+public interface OffersRepository <E extends Identifiable>  {
+     List<E> findAll();
 
-     Offer findById(long id);
+     E findById(long id);
 
-     Offer save(Offer offer);
-     Offer delete(long id );
+     E save(E entity);
+     E delete(long id );
 }

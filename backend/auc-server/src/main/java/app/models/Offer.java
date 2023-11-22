@@ -1,5 +1,6 @@
 package app.models;
 
+import app.repository.Identifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
@@ -9,10 +10,10 @@ import java.util.List;
 
 
 @Entity
-public class Offer {
+public class Offer implements Identifiable {
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
     private String title;
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -23,7 +24,7 @@ public class Offer {
     @JsonBackReference()
     private List<Bid> bids = new ArrayList<>();
 
-    public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
+    public Offer(Long id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
         this.id = id;
         this.title = title;
         this.status = status;
@@ -38,7 +39,7 @@ public class Offer {
 
 
 
-    public static Offer createSampleOffer(int id){
+    public static Offer createSampleOffer(long id){
         String title = "Exercise " + id;
         String description = "Description for Offer id: " + id;
         Status status = Status.values()[(int)(Math.random() * Status.values().length)];
@@ -75,9 +76,15 @@ public class Offer {
 
 
     @JsonView(Views.Summary.class)
-    public int getId() {
+    public long getId() {
         return id;
     }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public List<Bid> setBids() {
         return bids;
     }
@@ -122,9 +129,6 @@ public class Offer {
                 .orElse(0.0);
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public void setTitle(String title) {
         this.title = title;

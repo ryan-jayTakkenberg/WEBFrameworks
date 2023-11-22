@@ -7,7 +7,7 @@ import java.util.List;
 
 
 @Repository
-public class OffersRepositoryMock implements OffersRepository {
+public class OffersRepositoryMock implements OffersRepository<Offer> {
     private final List<Offer> offers = new ArrayList<>();
     public static int offerIdCount = 8;
 

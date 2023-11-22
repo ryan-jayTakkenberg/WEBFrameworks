@@ -1,14 +1,14 @@
 package app.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import app.repository.Identifiable;
 import jakarta.persistence.*;
 
 
 @Entity
-public class Bid {
+public class Bid implements Identifiable {
     @Id
     @GeneratedValue()
-    private Long idBid;
+    private long idBid;
 
     private double bidValue;
     @ManyToOne
@@ -39,8 +39,13 @@ public class Bid {
     }
 
 
-    public Long getId() {
+    public long getId() {
         return idBid;
+    }
+
+    @Override
+    public void setId(long id) {
+
     }
 
     public double getValue() {
@@ -55,7 +60,7 @@ public class Bid {
         this.offer = offer;
     }
 
-    public Long getIdBid() {
+    public long getIdBid() {
         return idBid;
     }
 

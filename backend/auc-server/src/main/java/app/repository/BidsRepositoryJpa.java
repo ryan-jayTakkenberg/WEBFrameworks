@@ -1,6 +1,7 @@
 package app.repository;
 
 import app.models.Bid;
+
 import app.models.Offer;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -10,15 +11,18 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-@Repository
+@Repository("BIDS.JPA")
 @Transactional
-@Primary
-public class BidsRepositoryJpa implements BidRepository{
+public class BidsRepositoryJpa extends AbstractEntityRepositoryJpa<Bid> {
     @PersistenceContext
     private EntityManager em;
 
+    public BidsRepositoryJpa() {
+        super(Bid.class);
+    }
+
     @Override
-    public List<Bid> findAllBids() {
+    public List<Bid> findAll() {
         TypedQuery<Bid> query =
                 this.em.createQuery(
                         "select o from Bid o", Bid.class);
@@ -26,19 +30,22 @@ public class BidsRepositoryJpa implements BidRepository{
     }
 
     @Override
-    public Bid findBidById(long id) {
+    public Bid findById(long id) {
         return this.em.find(Bid.class, id);
     }
 
+
     @Override
-    public Bid saveBid(Bid bid) {
+    public Bid save(Bid bid) {
         bid = this.em.merge(bid);
         return bid;
     }
 
+
+
     @Override
-    public Bid deleteBid(long id) {
-        Bid bid = findBidById(id);
+    public Bid delete(long id) {
+        Bid bid = findById(id);
         if (bid != null){
             this.em.remove(bid);
         }

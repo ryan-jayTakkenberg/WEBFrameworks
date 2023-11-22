@@ -11,13 +11,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Repository("OFFER.JPA")
 @Transactional
 @Primary
-public class OffersRepositoryJpa implements OffersRepository {
+public class OffersRepositoryJpa extends AbstractEntityRepositoryJpa<Offer> {
 
     @PersistenceContext
     private EntityManager em;
+
+    public OffersRepositoryJpa(){super(Offer.class);}
 
     @Override
     public List<Offer> findAll() {

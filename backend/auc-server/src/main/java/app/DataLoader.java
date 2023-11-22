@@ -26,9 +26,9 @@ public class DataLoader implements CommandLineRunner {
     @Transactional
     public void run(String... args) {
         // Create offers
-        Offer offer1 = new Offer(0, "Car", Offer.Status.NEW, "A new car", LocalDate.parse("2023-10-11"), 100.0);
-        Offer offer2 = new Offer(0, "Bike", Offer.Status.SOLD, "A sold Bike", LocalDate.parse("2023-11-20"), 150.00);
-        Offer offer3 = new Offer(0, "Bus", Offer.Status.FOR_SALE, "A sold Bike", LocalDate.parse("2023-11-20"), 800.00);
+        Offer offer1 = new Offer(0L, "Car", Offer.Status.NEW, "A new car", LocalDate.parse("2023-10-11"), 100.0);
+        Offer offer2 = new Offer(0L, "Bike", Offer.Status.SOLD, "A sold Bike", LocalDate.parse("2023-11-20"), 150.00);
+        Offer offer3 = new Offer(0L, "Bus", Offer.Status.FOR_SALE, "A sold Bike", LocalDate.parse("2023-11-20"), 800.00);
 
         // Save offers first to make them managed entities
         offersRepositoryJpa.save(offer1);
@@ -49,11 +49,11 @@ public class DataLoader implements CommandLineRunner {
         bid2.associateOffer(offer2);
         bid3.associateOffer(offer3);
 
-        bidsRepositoryJpa.saveBid(bid1);
-        bidsRepositoryJpa.saveBid(bid2);
-        bidsRepositoryJpa.saveBid(bid3);
-        bidsRepositoryJpa.saveBid(bid4);
-        bidsRepositoryJpa.saveBid(bid5);
+        bidsRepositoryJpa.save(bid1);
+        bidsRepositoryJpa.save(bid2);
+        bidsRepositoryJpa.save(bid3);
+        bidsRepositoryJpa.save(bid4);
+        bidsRepositoryJpa.save(bid5);
 
 
     }
