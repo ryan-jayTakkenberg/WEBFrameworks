@@ -1,6 +1,8 @@
 package app.models;
 
 import app.repository.Identifiable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 
@@ -12,7 +14,6 @@ public class Bid implements Identifiable {
 
     private double bidValue;
     @ManyToOne
-//    @JsonManagedReference remove this than the post works
     private Offer offer;
     public Bid() {
 
@@ -28,7 +29,6 @@ public class Bid implements Identifiable {
         if (offer != null && this.getOffer() == null) {
             // Debugging statement
             System.out.println("Associating Bid with Offer: Bid ID = " + this.getId() + ", Offer ID = " + offer.getId());
-            offer.associateBid(this);
             // Update both sides of the association
             offer.addBid(this);
             this.setOffer(offer);

@@ -29,8 +29,8 @@ export class Offer {
 
     get sellDate() {
         return `${this._sellDate.getFullYear()}-` +
-        `${this._sellDate.getMonth()+1}-`+
-        `${this._sellDate.getDate()}`
+        `${String(this._sellDate.getMonth()+1).padStart(2, '0')}-`+
+        `${String(this._sellDate.getDate()).padStart(2, '0')}`
     }
 
     set sellDate(value) {
@@ -57,7 +57,7 @@ export class Offer {
         const day = String(randomDate.getDate()).padStart(2, '0');
 
         const sellDate = `${year}-${month}-${day}`;
-
+         console.log(sellDate)
         return new Offer(id, title, status, description, sellDate, valueHighestBid);
     }
 

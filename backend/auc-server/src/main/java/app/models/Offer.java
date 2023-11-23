@@ -1,8 +1,7 @@
 package app.models;
 
 import app.repository.Identifiable;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class Offer implements Identifiable {
     private LocalDate sellDate;
     private double valueHighestBid;
     @OneToMany(mappedBy = "offer", cascade = CascadeType.MERGE)
-    @JsonBackReference()
+   @JsonIncludeProperties({"idBid", "bidValue"})
     private List<Bid> bids = new ArrayList<>();
 
     public Offer(Long id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
@@ -99,12 +98,6 @@ public class Offer implements Identifiable {
         bid.setOffer(null);
     }
 
-    public void associateBid(Bid bid) {
-        if (bid != null && !bids.contains(bid)) {
-            bids.add(bid);
-            bid.setOffer(this);
-        }
-    }
     @JsonView(Views.Summary.class)
     public String getTitle() {
         return title;

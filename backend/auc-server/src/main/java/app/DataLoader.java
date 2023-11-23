@@ -25,7 +25,9 @@ public class DataLoader implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        // Create offers
+
+
+        // Create offersr
         Offer offer1 = new Offer(0L, "Car", Offer.Status.NEW, "A new car", LocalDate.parse("2023-10-11"), 100.0);
         Offer offer2 = new Offer(0L, "Bike", Offer.Status.SOLD, "A sold Bike", LocalDate.parse("2023-11-20"), 150.00);
         Offer offer3 = new Offer(0L, "Bus", Offer.Status.FOR_SALE, "A sold Bike", LocalDate.parse("2023-11-20"), 800.00);

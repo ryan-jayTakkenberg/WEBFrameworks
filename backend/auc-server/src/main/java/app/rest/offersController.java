@@ -24,7 +24,7 @@ import java.util.Objects;
 
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/offers")
 public class offersController {
 
     private final OffersRepository offersRepository;
@@ -40,7 +40,7 @@ public class offersController {
     }
 
 
-    // Assuming you have a repository for Bid entities
+
 
     @Autowired
     public offersController(OffersRepository offersRepository, BidsRepositoryJpa bidsRepositoryJpa) {
