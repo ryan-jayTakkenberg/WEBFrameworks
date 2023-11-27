@@ -52,4 +52,9 @@ public class BidsRepositoryJpa extends AbstractEntityRepositoryJpa<Bid> {
         return null;
     }
 
+    @Override
+    public List<Bid> findByQuery(String jpqlName, Object... params) {
+        return null;
+    }
+
 }

@@ -6,7 +6,10 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+@NamedQueries({
+        @NamedQuery(name = "Offer_find_by_status", query = "SELECT o FROM Offer o WHERE o.status = :status "),
+        @NamedQuery(name = "Offer_find_by_title", query = "SELECT o FROM Offer o WHERE LOWER(o.description) LIKE LOWER(CONCAT('%', :description, '%'))"),
+})
 
 @Entity
 public class Offer implements Identifiable {
@@ -20,7 +23,8 @@ public class Offer implements Identifiable {
     private LocalDate sellDate;
     private double valueHighestBid;
     @OneToMany(mappedBy = "offer", cascade = CascadeType.MERGE)
-   @JsonIncludeProperties({"idBid", "bidValue"})
+//   @JsonIncludeProperties({"idBid", "bidValue"})
+    @JsonManagedReference
     private List<Bid> bids = new ArrayList<>();
 
     public Offer(Long id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {

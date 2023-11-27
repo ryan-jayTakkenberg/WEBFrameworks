@@ -62,4 +62,9 @@ public class OffersRepositoryMock implements OffersRepository<Offer> {
         }
         return null;
     }
+
+    @Override
+    public List<Offer> findByQuery(String jpqlName, Object... params) {
+        return null;
+    }
 }

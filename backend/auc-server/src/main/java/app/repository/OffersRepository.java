@@ -11,4 +11,6 @@ public interface OffersRepository <E extends Identifiable>  {
 
      E save(E entity);
      E delete(long id );
+
+     List<E> findByQuery(String jpqlName, Object... params);
 }

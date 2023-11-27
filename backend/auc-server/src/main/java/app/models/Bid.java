@@ -3,6 +3,7 @@ package app.models;
 import app.repository.Identifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 
@@ -14,6 +15,7 @@ public class Bid implements Identifiable {
 
     private double bidValue;
     @ManyToOne
+    @JsonBackReference
     private Offer offer;
     public Bid() {
 

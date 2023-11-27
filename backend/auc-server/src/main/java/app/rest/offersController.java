@@ -7,27 +7,25 @@ import app.models.Offer;
 import app.models.Views;
 import app.repository.BidsRepositoryJpa;
 import app.repository.OffersRepository;
-
+import app.repository.OffersRepositoryJpa;
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.rmi.StubNotFoundException;
 import java.util.List;
-import java.util.Objects;
 
 
 @RestController
 @RequestMapping("/offers")
 public class offersController {
 
-    private final OffersRepository offersRepository;
+    private final OffersRepositoryJpa offersRepository;
     private final BidsRepositoryJpa bidsRepositoryJpa;
 
 
@@ -43,7 +41,7 @@ public class offersController {
 
 
     @Autowired
-    public offersController(OffersRepository offersRepository, BidsRepositoryJpa bidsRepositoryJpa) {
+    public offersController(OffersRepositoryJpa offersRepository, BidsRepositoryJpa bidsRepositoryJpa) {
         this.offersRepository = offersRepository;
         this.bidsRepositoryJpa = bidsRepositoryJpa;
 
@@ -146,12 +144,15 @@ public class offersController {
 
     }
 
-    @GetMapping("/bids")
-    public List<Bid> getAllBids() {
-        return bidsRepositoryJpa.findAll();
+    @GetMapping("/status")
+    public List<Offer> getStatus(@RequestParam String status) {
+        return offersRepository.findByQuery("Offer_find_by_status", status);
     }
 
-
+    @GetMapping("/sub-title")
+    public List<Offer> getSubTitle(@RequestParam String description) {
+        return offersRepository.findByQuery("Offer_find_by_title", description);
+    }
 
 
 }
