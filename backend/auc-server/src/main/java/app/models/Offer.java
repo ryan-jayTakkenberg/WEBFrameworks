@@ -9,6 +9,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "Offer_find_by_status", query = "SELECT o FROM Offer o WHERE o.status = :status "),
         @NamedQuery(name = "Offer_find_by_title", query = "SELECT o FROM Offer o WHERE LOWER(o.description) LIKE LOWER(CONCAT('%', :description, '%'))"),
+        @NamedQuery(name = "Offer_find_by_status_and_minBidValue", query = "SELECT o FROM Offer o JOIN o.bids b WHERE o.status = ?1 AND b.bidValue >= ?2")
 })
 
 @Entity

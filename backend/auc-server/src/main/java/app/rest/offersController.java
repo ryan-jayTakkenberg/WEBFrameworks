@@ -6,11 +6,8 @@ import app.models.Bid;
 import app.models.Offer;
 import app.models.Views;
 import app.repository.BidsRepositoryJpa;
-import app.repository.OffersRepository;
 import app.repository.OffersRepositoryJpa;
 import com.fasterxml.jackson.annotation.JsonView;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,27 +25,32 @@ public class offersController {
     private final OffersRepositoryJpa offersRepository;
     private final BidsRepositoryJpa bidsRepositoryJpa;
 
-
-    @GetMapping("/test")
-    public List<Offer> getTestOffer(){
-        return List.of(
-                new Offer("Test-Offer-A"),
-                new Offer("Test-Offer-B")
-        );
-    }
-
-
-
-
     @Autowired
     public offersController(OffersRepositoryJpa offersRepository, BidsRepositoryJpa bidsRepositoryJpa) {
         this.offersRepository = offersRepository;
         this.bidsRepositoryJpa = bidsRepositoryJpa;
 
+
     }
     @GetMapping("")
-    public List<Offer> getAllOffers() {
-       return offersRepository.findAll();
+    public List<Offer> getAllOffers(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Double minValueBid
+    ){
+        if (title != null && status != null || title != null && minValueBid != null ||
+                title == null && status == null && minValueBid != null){
+            throw new PreConditionFailedException("Cannot handle your combination of request paramteres");
+        }
+
+        if (title != null){
+            return offersRepository.findByQuery("Offer_find_by_title", title);
+        } else if (status != null && minValueBid != null){
+            return offersRepository.findByQuery("Offer_find_by_status_and_minBidValue", status, minValueBid);
+        } else if (status != null){
+            return offersRepository.findByQuery("Offer_find_by_status", status);
+        }
+        return offersRepository.findAll();
     }
 
     @JsonView(Views.Summary.class)
@@ -130,7 +132,6 @@ public class offersController {
         }
 
 
-
         // Set the bid value explicitly
         newBid.setBidValue(newBid.getValue());
 
@@ -138,21 +139,9 @@ public class offersController {
         newBid.associateOffer(offer);
 
         // Save the bid to the repository and get the managed instance
-        Bid managedBid =  bidsRepositoryJpa.save(newBid);
+        Bid managedBid = bidsRepositoryJpa.save(newBid);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(managedBid);
-
     }
-
-    @GetMapping("/status")
-    public List<Offer> getStatus(@RequestParam String status) {
-        return offersRepository.findByQuery("Offer_find_by_status", status);
-    }
-
-    @GetMapping("/sub-title")
-    public List<Offer> getSubTitle(@RequestParam String description) {
-        return offersRepository.findByQuery("Offer_find_by_title", description);
-    }
-
-
 }
+

@@ -57,6 +57,9 @@ public class OffersRepositoryJpa extends AbstractEntityRepositoryJpa<Offer> {
             query.setParameter("status", Offer.Status.valueOf((String) params[0]));
         } else if (jpqlName.equals("Offer_find_by_title") && params.length > 0) {
             query.setParameter("description", "%" + String.valueOf((String) params[0]) + "%");
+        } else if (jpqlName.equals("Offer_find_by_status_and_minBidValue") && params.length > 1) {
+            query.setParameter(1, Offer.Status.valueOf((String) params[0]));
+            query.setParameter(2, params[1]);
         }
 
         return query.getResultList();
