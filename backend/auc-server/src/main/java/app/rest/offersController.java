@@ -40,8 +40,17 @@ public class offersController {
     ){
         if (title != null && status != null || title != null && minValueBid != null ||
                 title == null && status == null && minValueBid != null){
-            throw new PreConditionFailedException("Cannot handle your combination of request paramteres");
+            throw new PreConditionFailedException("Cannot handle your combination of request paramteres title=, status= and minValueBid= ");
         }
+
+        if (status != null) {
+            try {
+                Offer.Status.valueOf(status.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new PreConditionFailedException("Status=" + status + " is not a valid Offer status");
+            }
+        }
+
 
         if (title != null){
             return offersRepository.findByQuery("Offer_find_by_title", title);
