@@ -1,4 +1,4 @@
-package app;
+package app.repository;
 
 import app.models.Bid;
 import app.models.Offer;

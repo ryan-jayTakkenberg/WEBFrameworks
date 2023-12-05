@@ -8,11 +8,11 @@ public class JWTConfig {
     }
 
     public String getPassphrase() {
-        return "This is an secret code it is extremly hard to get in 89387439982497034893823498-4-2- ";
+        return "This is very secret information for my private encryption key that nobody can know.";
     }
 
     public String getIssuer() {
-        return "Team19";
+        return "private company";
     }
 
     public int getExpiration() {
