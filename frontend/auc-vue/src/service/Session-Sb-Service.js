@@ -55,6 +55,7 @@ export class SessionSbService {
        body: body,
        credentials: 'include',
       })
+
   if (response.ok) {
    let user = await response.json();
    this.saveTokenIntoBrowserStorage(
@@ -66,6 +67,9 @@ export class SessionSbService {
    console.log(response)
    return null;
   }
+ }
+ isAuthenticated() {
+  return this._currentToken != null;
  }
 
  signOut() {

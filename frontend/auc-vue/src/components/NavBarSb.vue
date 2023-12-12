@@ -24,9 +24,11 @@
     </div>
     <router-link to="/myaccount" active-class="highlight">My Account</router-link>
     <div class="nav-right">
-      <router-link to="/sign-up" active-class="highlight">Sign Up</router-link>
-      <router-link to="/sign-in" active-class="highlight">Log In</router-link>
-      <router-link to="/sign-out" active-class="highlight">Log Out</router-link>
+        <router-link v-if="!sessionService.isAuthenticated()" to="/sign-up" active-class="highlight">Sign Up</router-link>
+        <router-link v-if="!sessionService.isAuthenticated()" to="/sign-in" active-class="highlight">Log In</router-link>
+        <router-link to="/sign-out" active-class="highlight" @click="logout">Log Out</router-link>
+
+
     </div>
   </div>
 </template>
@@ -40,6 +42,11 @@ export default {
 
     }
   },
+  methods: {
+    logout() {
+      this.sessionService.signOut();
+    }
+  }
 
 }
 </script>

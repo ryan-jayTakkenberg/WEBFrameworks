@@ -33,6 +33,7 @@ export default {
             this.email,
             this.password
         )
+
         if (account){
           this.JWT = this.sessionService.currentToken;
         }
