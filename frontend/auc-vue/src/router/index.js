@@ -10,6 +10,7 @@ import OffersDetail33 from "@/components/offers/OffersDetail33.vue";
 import OffersDetail34 from "@/components/offers/OffersDetail34";
 import OffersDetail37 from "@/components/offers/OffersDetail37.vue";
 import offersOverview37 from "@/components/offers/OffersOverview37.vue";
+import logInComponent from "@/components/LogInComponent";
 
 const routes = [
     { path: "/", component: WelcomePage },
@@ -34,11 +35,8 @@ const routes = [
                 component: OffersDetail37,
             }
         ]},
-    { path: "/offer/active", },
-    { path: "/offer/history", },
-    { path: "/sign-in", },
-    { path: "/sign-up", },
-    { path: "/myaccount", },
+    { path: "/sign-in", component: logInComponent},
+    { path: "/sign-out", redirect: "/sign-in", query: {signOff: true}},
     { path: "/:catchAll(.*)", component: unknownRoute }
 ]
 

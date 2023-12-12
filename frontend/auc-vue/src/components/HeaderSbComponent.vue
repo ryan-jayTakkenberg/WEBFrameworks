@@ -2,7 +2,7 @@
   <header class="header">
     <div class="header-content">
       <div class="left-image">
-        <img src="tijd.jpg" alt="Tijd afbeelding" class="header-image">
+        <img src="@/assets/tijd.jpg" alt="Tijd afbeelding" class="header-image">
       </div>
       <div class="text-content">
         <h1>The Auctioneer</h1>
@@ -14,12 +14,13 @@
             </div>
             <div class="col">
               <p class="subtitle">Offered to you by Hva.nl</p>
+              <p class="subtitle">Welcome {{userName}}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="right-image">
-        <img src="veilinghamer.jpg" alt="Veilinghamer afbeelding" class="header-image">
+        <img src="@/assets/veilinghamer.jpg" alt="Veilinghamer afbeelding" class="header-image">
       </div>
     </div>
   </header>
@@ -109,20 +110,32 @@ h1 {
 
 export default {
   name: 'HeaderSbComponent',
-  inject: ['s'],
+  inject: ['sessionService'],
   data() {
     return {
       localDate: new Date(),
+      userName: null,
     }
   },
   computed: {
     todayDate() {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       return this.localDate.toLocaleDateString('en-US', options);
-
-
     }
   },
+  created() {
+    this.updateUserName();
+    this.$watch(() => this.sessionService.currentAccount, () => this.updateUserName())
+  },
+  methods: {
+    updateUserName(){
+      if (this.sessionService.currentAccount === "Visitor"){
+        this.userName = "Visitor"
+      } else {
+        this.userName = this.sessionService.currentAccount.name;
+      }
+    }
+  }
 };
 
 

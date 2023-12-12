@@ -3,15 +3,24 @@ export class SessionSbService {
  BROWSER_STORAGE_ITEM_NAME;
  _currentToken;
  _currentAccount;
+ _defaultAccountName = "Visitor";
 
  constructor(resourcesUrl, browserStorageItemName) {
   this.BROWSER_STORAGE_ITEM_NAME = browserStorageItemName;
   this.RESOURCES_URL = resourcesUrl;
   this._currentAccount = null;
   this._currentToken = null;
+
   this.getTokenFromBrowserStorage();
  }
 
+ get currentAccount() {
+   return this._currentAccount || this._defaultAccountName;
+ }
+
+ get currentToken() {
+  return this._currentToken;
+ }
 
  getTokenFromBrowserStorage() {
   if (this._currentToken != null) return this._currentToken
@@ -32,7 +41,6 @@ export class SessionSbService {
    window.localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME);
    window.localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME+"_ACC");
   } else {
-   console.log("New token for " + account.name + ": " + token);
    window.localStorage.setItem(this.BROWSER_STORAGE_ITEM_NAME, token);
    window.localStorage.setItem(this.BROWSER_STORAGE_ITEM_NAME+"_ACC", JSON.stringify(account));
   }
@@ -50,16 +58,20 @@ export class SessionSbService {
   if (response.ok) {
    let user = await response.json();
    this.saveTokenIntoBrowserStorage(
-       user.headers.get('Authorization'),
+       response.headers.get('Authorization'),
        user);
    return user;
   } else {
+   alert("Something went wrong, please check your credentials again.")
    console.log(response)
    return null;
   }
  }
 
  signOut() {
-  this.saveTokenIntoBrowserStorage(null, null);
+  window.localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME);
+  window.localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME+"_ACC");
+  this._currentAccount = null;
+  this._currentToken = null;
  }
 }
