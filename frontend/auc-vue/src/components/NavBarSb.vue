@@ -26,7 +26,7 @@
     <div class="nav-right">
         <router-link v-if="!sessionService.isAuthenticated()" to="/sign-up" active-class="highlight">Sign Up</router-link>
         <router-link v-if="!sessionService.isAuthenticated()" to="/sign-in" active-class="highlight">Log In</router-link>
-        <router-link to="/sign-out" active-class="highlight" @click="logout">Log Out</router-link>
+        <router-link v-if="sessionService.isAuthenticated()" to="/sign-out" active-class="highlight" @click="logout">Log Out</router-link>
 
 
     </div>
