@@ -20,9 +20,6 @@ import java.util.List;
 @RequestMapping("/authentication")
 public class AuthenticationController {
 
-
-
-
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody ObjectNode requestBody) {
         String email = requestBody.get("email").asText();
@@ -53,8 +50,6 @@ public class AuthenticationController {
         // For simplicity, extract the name from the start of the email address
         return email.split("@")[0];
     }
-
-
 }
 
 
