@@ -12,6 +12,7 @@ import {OffersAdaptor} from "@/service/offers-adaptor";
 import {shallowReactive} from "vue";
 import {SessionSbService} from "@/service/Session-Sb-Service";
 import NavBarSbComponent from "@/components/NavBarSb";
+import {FetchInterceptor} from "@/service/FetchInterceptor";
 
 
 export default {
@@ -21,12 +22,22 @@ export default {
     HeaderSbComponent,
   },
   provide(){
+
+
+
     this.theSessionService = shallowReactive(
         new SessionSbService(CONFIG.BACKEND_URL + "/authentication", CONFIG.JWT_STORAGE_ITEM));
+
+    this.theFetchInterceptor =
+        new FetchInterceptor(this.theSessionService, this.$router);
     return{
       offersService: new OffersAdaptor(CONFIG.BACKEND_URL+"/offers"),
       sessionService: this.theSessionService
     }
+  },
+  unmounted() {
+    console.log("App.unmounted() has been called")
+    this.theFetchInterceptor.unregister();
   }
 }
 </script>
