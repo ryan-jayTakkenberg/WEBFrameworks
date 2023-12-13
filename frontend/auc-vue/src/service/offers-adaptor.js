@@ -50,7 +50,8 @@ export class OffersAdaptor {
         const options = {
             method,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+
             },
             body: offer.toJsonString()
         };
