@@ -15,7 +15,7 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("http://localhost:8080")
+                        .allowedOrigins("http://localhost:8081") // Voeg hier het domein van je frontend-UI toe
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE)
                         .exposedHeaders(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE)

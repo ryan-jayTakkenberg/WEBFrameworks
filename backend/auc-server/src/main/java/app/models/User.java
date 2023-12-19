@@ -1,14 +1,17 @@
 package app.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import app.repository.Identifiable;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
 @Entity
-public class User {
+@Table(name = "app_user")
+public class User implements Identifiable {
     @GeneratedValue
     @Id
     private long id;
@@ -16,6 +19,9 @@ public class User {
     private String email;
     private String hashedPassword;
     private String role;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+    @JsonManagedReference
+    private List<Bid> bids = new ArrayList<>();
 
     public User( String name, String email, String hashedPassword) {
         this.id = (long) (Math.random() * 30);
@@ -43,6 +49,19 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public List<Bid> setBids() {
+        return bids;
+    }
+
+    public void addBid(Bid bid) {
+        bids.add(bid);
+        bid.setUser(this);
+    }
+
+    public void removeBid(Bid bid) {
+        bids.remove(bid);
+        bid.setUser(null);
     }
 
     public String getEmail() {

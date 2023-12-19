@@ -4,6 +4,7 @@ import app.repository.Identifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 
@@ -17,6 +18,15 @@ public class Bid implements Identifiable {
     @ManyToOne
     @JsonBackReference
     private Offer offer;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = {"bids", "email", "hashedPassword", "role"})
+    @JsonProperty("madeBy")
+    private User user;
+
+
+
+
     public Bid() {
 
     }
@@ -29,12 +39,17 @@ public class Bid implements Identifiable {
 
     public boolean associateOffer(Offer offer) {
         if (offer != null && this.getOffer() == null) {
-            // Debugging statement
-            System.out.println("Associating Bid with Offer: Bid ID = " + this.getId() + ", Offer ID = " + offer.getId());
-            // Update both sides of the association
             offer.addBid(this);
             this.setOffer(offer);
+            return true;
+        }
+        return false;
+    }
 
+    public boolean associateUser(User user) {
+        if (user != null && this.getUser() == null) {
+            user.addBid(this);
+            this.setUser(user);
             return true;
         }
         return false;
@@ -72,6 +87,18 @@ public class Bid implements Identifiable {
 
     public double getBidValue() {
         return bidValue;
+    }
+
+    public void setIdBid(long idBid) {
+        this.idBid = idBid;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setBidValue(double bidValue) {
