@@ -18,6 +18,7 @@
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
+        <router-link to="/offers/bidOverview45" active-class="highlight">Offers on sale</router-link>
         <router-link to="/offer/active" active-class="highlight">Active</router-link>
         <router-link to="/offer/history" active-class="highlight">History</router-link>
       </div>

@@ -30,6 +30,16 @@ export class OffersAdaptor {
         }
     }
 
+    async asyncFindAllForSale() {
+        const offersData = await this.fetchJson(this.resourcesUrl + "?status=FOR_SALE");
+        if (Array.isArray(offersData)) {
+            return offersData.map(Offer.copyConstructor);
+        } else {
+            console.error('Geen geldige JSON-array ontvangen.');
+            return [];
+        }
+    }
+
     async asyncFindById(id) {
         console.log('OffersAdaptor.asyncFindById(' + id + ')...');
         return this.fetchJson(this.resourcesUrl + "/" + id);

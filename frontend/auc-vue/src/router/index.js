@@ -11,6 +11,8 @@ import OffersDetail34 from "@/components/offers/OffersDetail34";
 import OffersDetail37 from "@/components/offers/OffersDetail37.vue";
 import offersOverview37 from "@/components/offers/OffersOverview37.vue";
 import logInComponent from "@/components/LogInComponent";
+import bidsOverview45 from "@/components/bids/BidsOverview45";
+import bidsDetail45 from "@/components/bids/BidsDetail45";
 
 const routes = [
     { path: "/", component: WelcomePage },
@@ -33,6 +35,13 @@ const routes = [
             {
                 path: ":id",
                 component: OffersDetail37,
+            }
+        ]},
+    { path: "/offers/bidOverview45", component: bidsOverview45,
+        children: [
+            {
+                path: ":id",
+                component: bidsDetail45,
             }
         ]},
     { path: "/sign-in", component: logInComponent},
